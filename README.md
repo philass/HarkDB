@@ -1,0 +1,3 @@
+# harkdb
+
+A query engine that runs on both the GPU and CPU for uniform data...
