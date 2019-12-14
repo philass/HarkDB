@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
 
-while (input("harkdb : ") != ".exit"):
-  print("keep going")
+from parser import command_parser
+
+user_input = input("harkdb> ")
+while (user_input != ".exit"):
+  command_parser(user_input)
+  user_input = input("harkdb> ")
