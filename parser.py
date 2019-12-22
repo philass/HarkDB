@@ -43,7 +43,15 @@ def meta_command(keywords):
   else: 
     print("Didn't recognize command " + keywords[0])
         
-        
+ 
 
+"""
+SELECT col1, ..... coln
+FROM TABLE1
+"""
+
+  
+
+  
 
     

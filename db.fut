@@ -1,6 +1,5 @@
 -- File contains functions for handling SQL Queries
 
-entry select_single_col(db : [][]i64) (col : i32) : []i64 =  db[:, col]
 
 -- select columns of relevance
 let select (cols : []i32) (row : []i64) : []i64 = 
