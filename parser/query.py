@@ -16,28 +16,48 @@ import sqlparse as sqp #Library for tokenizing SQL statement
 
 class Query:
   def __init__(self, query):
-
-  def query_parse(query):
     """
-    Parse Query into SQL Dictionary with key value pairs of 
-    SubClause : identifier List
+    Constructor taking a string Query for analysis
     """
-    statement = sqp.parse(query)[0] #Get Tokenized list of first SQL statement
-    s1_clean = filter(lambda x : str(x.ttype)[11:21] != 'Whitespace')
+    clause_dictionary = query_parse(query)
+    self.Select = clause_dictionary["select"]
+    self.From = clause_dictionary["from"]
+    self.Where = clause_dictionary["where"]
+    self.Having = clause_dictionary["having"]
+    self.Group_by = clause_dictionary["group_by"]
+
+def query_parse(query):
+  """
+  Parse Query into SQL Dictionary with key value pairs of 
+  SubClause : identifier List
+  """
+  clause_dic = {"select" : [], "from" : [], "where" : [],
+                "having" : [], "group_by" : []}
+  statement = sqp.parse(query)[0] #Get Tokenized list of first SQL statement
+  f = lambda x : str(x.ttype)[11:21] != 'Whitespace'
+  s1_clean = list(filter(f, list(statement)))
+  keywords = clause_dic.keys() - "where" # Where is treated different by sqparse"
+  for i in range(len(list(s1_clean))):
+    val = s1_clean[i].value
+    if val in keywords:
+      clause_dic[val] = identifier_to_list(s1_clean[i+1])
+    elif val[:5] == "where":
+      clause_dic["where"] = val[5:]
+  print(clause_dic)
 
 
-  def identifier_to_list(sqp_token):
-    """
-    Convert IDENTIFIER List or Identifier into a list of columns
-    """
-    try:
-      tokens = list(sqp_token)
-      named_cols = filter(lambda x: x.ttype == None)
-      return list(map(lambda x: x.value, named_cols))
+def identifier_to_list(sqp_token):
+  """
+  Convert IDENTIFIER List or Identifier into a list of columns
+  """
+  try:
+    tokens = list(sqp_token)
+    named_cols = filter(lambda x: x.ttype == None)
+    return list(map(lambda x: x.value, named_cols))
 
-    #Assumes failure means we are working with Identifier only
-    except:
-      return list([sqp_token.value])
+  #Assumes failure means we are working with Identifier only
+  except:
+    return list([sqp_token.value])
 
 
 
