@@ -20,11 +20,27 @@ class Query:
     Constructor taking a string Query for analysis
     """
     clause_dictionary = query_parse(query)
-    self.Select = clause_dictionary["select"]
-    self.From = clause_dictionary["from"]
-    self.Where = clause_dictionary["where"]
-    self.Having = clause_dictionary["having"]
-    self.Group_by = clause_dictionary["group_by"]
+    self._Select = clause_dictionary["select"]
+    self._From = clause_dictionary["from"]
+    self._Where = clause_dictionary["where"]
+    self_.Having = clause_dictionary["having"]
+    self._Group_by = clause_dictionary["group by"]
+
+  def get_Select(self):
+    return self._Select
+
+  def get_From(self):
+    return self._From
+
+  def get_Where(self):
+    return self._Where
+
+  def get_Having(self):
+    return self._Having
+
+  def get_Group_by(self):
+    return self._Group_by
+
 
 def query_parse(query):
   """
@@ -32,7 +48,7 @@ def query_parse(query):
   SubClause : identifier List
   """
   clause_dic = {"select" : [], "from" : [], "where" : [],
-                "having" : [], "group_by" : []}
+                "having" : [], "group by" : []}
   statement = sqp.parse(query)[0] #Get Tokenized list of first SQL statement
   f = lambda x : str(x.ttype)[11:21] != 'Whitespace'
   s1_clean = list(filter(f, list(statement)))
