@@ -13,35 +13,6 @@ Having condk.... condm
 
 import sqlparse as sqp #Library for tokenizing SQL statement
 
-
-class Query:
-  def __init__(self, query):
-    """
-    Constructor taking a string Query for analysis
-    """
-    clause_dictionary = query_parse(query)
-    self._Select = clause_dictionary["select"]
-    self._From = clause_dictionary["from"]
-    self._Where = clause_dictionary["where"]
-    self_.Having = clause_dictionary["having"]
-    self._Group_by = clause_dictionary["group by"]
-
-  def get_Select(self):
-    return self._Select
-
-  def get_From(self):
-    return self._From
-
-  def get_Where(self):
-    return self._Where
-
-  def get_Having(self):
-    return self._Having
-
-  def get_Group_by(self):
-    return self._Group_by
-
-
 def query_parse(query):
   """
   Parse Query into SQL Dictionary with key value pairs of 
@@ -77,5 +48,30 @@ def identifier_to_list(sqp_token):
 
 
 
+class Query:
+  def __init__(self, query):
+    """
+    Constructor taking a string Query for analysis
+    """
+    clause_dictionary = query_parse(query)
+    self._Select = clause_dictionary["select"]
+    self._From = clause_dictionary["from"]
+    self._Where = clause_dictionary["where"]
+    self_.Having = clause_dictionary["having"]
+    self._Group_by = clause_dictionary["group by"]
 
- 
+  def get_Select(self):
+    return self._Select
+
+  def get_From(self):
+    return self._From
+
+  def get_Where(self):
+    return self._Where
+
+  def get_Having(self):
+    return self._Having
+
+  def get_Group_by(self):
+    return self._Group_by
+

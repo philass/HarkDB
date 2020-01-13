@@ -34,14 +34,19 @@ class Table:
   Class for representing a data table.
   Consists of a schema and data
   """
-  def __init__(self, file_name):
+  def __init__(self, table_name, file_name):
+    self._table_name = table_name
     table, headers = load_table(file_name)
     self._schema = headers
-    self._data = data
+    self._data = table
 
   def get_schema(self):
     return self._schema
 
   def get_data(self):
     return self._data
+
+  def get_name(self):
+    return self._table_name
+
 
