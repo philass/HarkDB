@@ -6,18 +6,21 @@ and Meta Commands
 
 from tables import table as tab
 from parser import query as que
-
+from CodeGen import futGen as fg
 
 # Tables maps table names -> (table, headers)
 
 def command_parser(query):
   """Parse the text into a SQL Query"""
+  global tables
   keywords = query.split()
   print(keywords)
   if keywords[0][0] == '.':
     meta_command(keywords)
   else:
     q = que.Query(query)
+    rep = fg.Representation(tables, q) 
+    rep.generateFuthark()
     print(q.get_Select())
     print(q.get_From())
     print(q.get_Where())

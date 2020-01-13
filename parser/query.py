@@ -31,6 +31,7 @@ def query_parse(query):
     elif val[:5] == "where":
       clause_dic["where"] = val[5:]
   print(clause_dic)
+  return clause_dic
 
 
 def identifier_to_list(sqp_token):
@@ -40,11 +41,14 @@ def identifier_to_list(sqp_token):
   try:
     tokens = list(sqp_token)
     named_cols = filter(lambda x: x.ttype == None)
-    return list(map(lambda x: x.value, named_cols))
+    hack = list(map(lambda x: x.value, named_cols))
+    return [x.strip() for x in hack[0].split(',')]
 
   #Assumes failure means we are working with Identifier only
   except:
-    return list([sqp_token.value])
+    hack = list([sqp_token.value])
+    return [x.strip() for x in hack[0].split(',')]
+
 
 
 
@@ -57,7 +61,7 @@ class Query:
     self._Select = clause_dictionary["select"]
     self._From = clause_dictionary["from"]
     self._Where = clause_dictionary["where"]
-    self_.Having = clause_dictionary["having"]
+    self._Having = clause_dictionary["having"]
     self._Group_by = clause_dictionary["group by"]
 
   def get_Select(self):
