@@ -7,6 +7,8 @@ and Meta Commands
 from tables import table as tab
 from parser import query as que
 from CodeGen import futGen as fg
+import numpy as np
+import os
 
 # Tables maps table names -> (table, headers)
 
@@ -21,13 +23,22 @@ def command_parser(query):
     q = que.Query(query)
     rep = fg.Representation(tables, q) 
     rep.generateFuthark()
-    print(q.get_Select())
-    print(q.get_From())
-    print(q.get_Where())
+    t_called = rep.get_table()
+    idxs = rep.get_idxs()
+    sys_call()
+    from futhark import db_sel
+    val = db_sel()
+    res = val.select_from_where(t_called.get_data(), np.array(idxs).astype('int32'))
+    print(res)
+
 
 tables = []
 
-    
+
+def sys_call():
+  os.system("cd futhark/ && make fut_lib")  
+
+  
   
 def meta_command(keywords):
   """
