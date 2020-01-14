@@ -32,10 +32,10 @@ class Representation:
     Generates Futhark code for the SQL Query 
     based on the internal Representation
     """
-    select_header = "let select (cols : []i32) (row : []i64) : []i64 = \n"
+    select_header = "let select (cols : []i32) (row : []f32) : []f32 = \n"
     select_s1 = "  let f = (\i -> unsafe row[i])\n"
     select_s2 = "  in map f cols\n"
-    select_from_header = "entry select_from_where (db : [][]i64) (cols : []i32) : [][]i64 =\n"
+    select_from_header = "entry select_from_where (db : [][]f32) (cols : []i32) : [][]f32 =\n"
     result = "  map (select cols) db\n"
     fut_file = open("futhark/db_sel.fut", "w+")
     fut_file.write(select_header)

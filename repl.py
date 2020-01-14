@@ -16,7 +16,6 @@ def command_parser(query):
   """Parse the text into a SQL Query"""
   global tables
   keywords = query.split()
-  print(keywords)
   if keywords[0][0] == '.':
     meta_command(keywords)
   else:
@@ -27,9 +26,13 @@ def command_parser(query):
     idxs = rep.get_idxs()
     sys_call()
     from futhark import db_sel
-    val = db_sel()
-    res = val.select_from_where(t_called.get_data(), np.array(idxs).astype('int32'))
-    print(res)
+    val = db_sel.db_sel()
+    
+    data = np.transpose(t_called.get_data().astype('float32'))
+    data_T = data.T
+    res1= val.select_from_where(data_T,  np.array(idxs).astype('int32'))
+    print(data_T)
+    print(res1)
 
 
 tables = []
