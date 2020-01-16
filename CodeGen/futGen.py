@@ -15,7 +15,6 @@ def query_to_representation(tables, query):
   
 
 
-
 class Representation:
   def __init__(self, tables, query):
     (table, idxs) = query_to_representation(tables, query)
@@ -30,14 +29,45 @@ class Representation:
     return self._idxs
 
   def where_rewrite(self):
-    where_eq_adjusted = self._where.replace("=", " == ")
-    where_and_adjusted = where_eq_adjusted.replace(" and ", " && ")
-    where_AND_adjusted = where_and_adjusted.replace(" AND ", " && ")
-    where_or_adjusted = where_AND_adjusted.replace(" or ", " || ")
-    where_OR_adjusted = where_or_adjusted.replace(" OR ", " || ")
-    where_clean = where_OR_adjusted
-    with_inds = [(h, where_clean.find(h) for h in table.get_schema()]
+    """
+    Rewrites where clause into Futhark acceptable Format
+    """
+    if self._where == []:
+      return "let keep = filter (\\row -> true) db\n"
 
+    where_eq_adjusted = self._where.replace("=", " == ")
+    
+    if where_eq_adjusted.find(" and ") != -1:
+      where_and_adjusted = "(" + where_eq_adjusted.replace(" and ", ") && ")
+    else: 
+      where_and_adjusted = where_eq_adjusted
+    if where_and_adjusted.find(" AND ") != -1:
+      where_AND_adjusted ="(" +  where_and_adjusted.replace(" AND ", ") && ")
+    else: 
+      where_AND_adjusted = where_and_adjusted
+    if where_AND_adjusted.find(" or ") != -1:
+      where_or_adjusted = "(" + where_AND_adjusted.replace(" or ", ") || ")
+    else: 
+      where_or_adjusted = where_AND_adjusted
+    if where_or_adjusted.find(" OR ") != -1:
+      where_OR_adjusted = "(" + where_or_adjusted.replace(" OR ", ") || ")
+    else: 
+      where_OR_adjusted = where_or_adjusted
+    where_clean = where_OR_adjusted
+    updating_statement = where_clean
+    for i, h in enumerate(self._table.get_schema()):
+      print(updating_statement)
+      print(i)
+      print(h)
+      index = updating_statement.find(h)
+      print(index)
+      if index != -1:
+        updating_statement = updating_statement.replace(h, "")
+        updating_statement = updating_statement[:index] + "row[" + str(i) + "]"  + updating_statement[len(str(i)) + index:]
+    return "let keep = filter (\\row -> unsafe " + updating_statement + " ) db\n"
+
+
+    
 
 
   def generateFuthark(self):
@@ -49,13 +79,15 @@ class Representation:
     select_s1 = "  let f = (\i -> unsafe row[i])\n"
     select_s2 = "  in map f cols\n"
     select_from_header = "entry select_from_where (db : [][]f32) (cols : []i32) : [][]f32 =\n"
-    result = "  map (select cols) db\n"
+    where_part = self.where_rewrite()
+    result = "  in map (select cols) keep\n"
     fut_file = open("futhark/db_sel.fut", "w+")
     fut_file.write(select_header)
     fut_file.write(select_s1)
     fut_file.write(select_s2)
     fut_file.write("")
     fut_file.write(select_from_header)
+    fut_file.write(where_part)
     fut_file.write(result)
 
 
