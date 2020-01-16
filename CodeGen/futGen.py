@@ -56,14 +56,11 @@ class Representation:
     where_clean = where_OR_adjusted
     updating_statement = where_clean
     for i, h in enumerate(self._table.get_schema()):
-      print(updating_statement)
-      print(i)
-      print(h)
       index = updating_statement.find(h)
-      print(index)
-      if index != -1:
-        updating_statement = updating_statement.replace(h, "")
+      while (index != -1):
+        updating_statement = updating_statement[:index] + updating_statement[index + len(h):]
         updating_statement = updating_statement[:index] + "row[" + str(i) + "]"  + updating_statement[len(str(i)) + index:]
+        index = updating_statement.find(h)
     return "let keep = filter (\\row -> unsafe " + updating_statement + " ) db\n"
 
 
