@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#/usr/bin/env python3
 """
 File contains code for parsing SQL Queries
 and Meta Commands
@@ -41,7 +41,9 @@ tables = []
 def sys_call():
   os.system("cd futhark/ && make fut_lib")  
 
-  
+def help():
+  print(".exit \t Exit this program")
+  print(".import FILE TABLE \t import data from FILE into TABLE")
   
 def meta_command(keywords):
   """
@@ -54,6 +56,8 @@ def meta_command(keywords):
       [file_name, table_name] = keywords[1:]
       t = tab.Table(table_name, file_name)
       tables += [t]
+  elif keywords[0] == ".help":
+    help()
   else: 
     print("Didn't recognize command " + keywords[0])
         
@@ -61,7 +65,6 @@ def meta_command(keywords):
 user_input = input("harkdb> ")
 while (user_input != ".exit"):
   command_parser(user_input)
-  print([t.get_name() for t in tables])
   user_input = input("harkdb> ")
 
 
