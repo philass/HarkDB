@@ -6,7 +6,7 @@ and Meta Commands
 
 from tables import table as tab
 from parser import query as que
-from CodeGen import futGen as fg
+from CodeGen import fut_gen as fg
 import numpy as np
 import os
 
@@ -21,7 +21,7 @@ def command_parser(query):
   else:
     q = que.Query(query)
     rep = fg.Representation(tables, q) 
-    rep.generateFuthark()
+    rep.generate_futhark()
     t_called = rep.get_table()
     idxs = rep.get_idxs()
     sys_call()
