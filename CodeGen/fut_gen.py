@@ -5,13 +5,13 @@ def query_to_representation(tables, query):
     """
     Transforms query into representation
     """
-    table_name = query.get_From()[0]
+    table_name = query.get_from()[0]
     table = None
     for tbl in tables:
         if tbl.get_name() == table_name:
             table = tbl
     header = table.get_schema()
-    cols = query.get_Select()
+    cols = query.get_select()
     idxs = [header.index(c) for c in cols]
     return (table, idxs)
 
@@ -21,7 +21,7 @@ class Representation:
     """
     def __init__(self, tables, query):
         (table, idxs) = query_to_representation(tables, query)
-        self._where = query.get_Where()
+        self._where = query.get_where()
         self._table = table
         self._idxs = idxs
 

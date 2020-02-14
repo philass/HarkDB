@@ -1,4 +1,5 @@
 # /usr/bin/env python3
+
 """
 File contains code for parsing SQL Queries
 and Meta Commands
@@ -8,7 +9,7 @@ import os
 from parser import query as que
 import numpy as np
 
-from TABLES import table as tab
+from tables import table as tab
 from CodeGen import fut_gen as fg
 
 # Tables maps table names -> (table, headers)

@@ -44,14 +44,15 @@ def identifier_to_list(sqp_token):
     Convert IDENTIFIER List or Identifier into a list of columns
     """
     try:
+        tokens = list(sqp_token)
         named_cols = filter(lambda x: x.ttype is None)
         hack = list(map(lambda x: x.value, named_cols))
         return [x.strip() for x in hack[0].split(',')]
 
     # Assumes failure means we are working with Identifier only
-    finally:
+    except:
         hack = list([sqp_token.value])
-    return [x.strip() for x in hack[0].split(',')]
+        return [x.strip() for x in hack[0].split(',')]
 
 
 class Query:
