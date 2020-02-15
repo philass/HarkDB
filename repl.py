@@ -5,6 +5,7 @@ File contains code for parsing SQL Queries
 and Meta Commands
 """
 import os
+import time
 
 from parser import query as que
 import numpy as np
@@ -18,6 +19,8 @@ from CodeGen import fut_gen as fg
 def command_parser(query):
     """Parse the text into a SQL Query"""
     global TABLES
+    global TIMER
+
     keywords = query.split()
     if keywords[0][0] == '.':
         meta_command(keywords)
@@ -32,13 +35,18 @@ def command_parser(query):
         val = db_sel.db_sel()
         data = np.transpose(t_called.get_data().astype('float32'))
         data_t = data.T
+        if TIMER:
+            start = time.time()
         res1 = val.select_from_where(data_t, np.array(idxs).astype('int32'))
+        if TIMER:
+            stop = time.time()
+            print("Execution time = " + str(stop - start))
         print(data_t)
         print(res1)
 
 
 TABLES = []
-
+TIMER = False
 
 def sys_call():
     """
@@ -61,6 +69,7 @@ def meta_command(keywords):
     which are command starting with "."
     """
     global TABLES
+    global TIMER
     if keywords[0] == ".import":
         if len(keywords) == 3:
             [file_name, table_name] = keywords[1:]
@@ -68,6 +77,8 @@ def meta_command(keywords):
             TABLES += [table_to_add]
     elif keywords[0] == ".help":
         get_help()
+    elif len(keywords) > 1 and keywords[0] == ".timer" and keywords[1] == "on":
+        TIMER = True
     else:
         print("Didn't recognize command " + keywords[0])
 
