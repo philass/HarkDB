@@ -11,9 +11,16 @@ def query_to_representation(tables, query):
         if tbl.get_name() == table_name:
             table = tbl
     header = table.get_schema()
-    cols = query.get_select()
-    idxs = [header.index(c) for c in cols]
-    return (table, idxs)
+    groupby = query.get_group_by()
+    if groupby == []:
+        cols = query.get_select()
+        idxs = [header.index(c) for c in cols]
+        return (table, idxs)
+    else:
+        groupby_col_idxs = [header.index(c) for c in groupby]
+        # Check that only group by columns 
+        # and agg functions are in select cols
+        # Return format -> [agg idxs], [group by cols idxs in select], [group by cols in groupby], table
 
 class Representation:
     """
@@ -22,6 +29,8 @@ class Representation:
     def __init__(self, tables, query):
         (table, idxs) = query_to_representation(tables, query)
         self._where = query.get_where()
+        self._group_by = query.get_group_by()
+        print(query)
         self._table = table
         self._idxs = idxs
 

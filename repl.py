@@ -88,7 +88,7 @@ def meta_command(keywords):
         else:
             print(f"Didn't recognize command {keywords_as_string}")
     else:
-        print("Didn't recognize command {keywords_as_string}")
+        print(f"Didn't recognize command {keywords_as_string}")
 
 USER_INPUT = input("harkdb> ")
 while USER_INPUT != ".exit":

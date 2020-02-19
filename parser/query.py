@@ -100,3 +100,16 @@ class Query:
         Get group by
         """
         return self._group_by
+
+
+    def __str__(self):
+        """
+        String representation of the Query
+        """
+        rep = f"""select   : {self._select}
+                 from     : {self._from}
+                 where    : {self._where}
+                 having   : {self._having}
+                 group by : {self._group_by}"""
+        return rep
+
