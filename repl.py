@@ -60,7 +60,9 @@ def get_help():
     Prints help information
     """
     print(".exit \t Exit this program")
+    print(".help \t Show this message")
     print(".import FILE TABLE \t import data from FILE into TABLE")
+    print(".timer on \t Turn SQL timer on or off")
 
 
 def meta_command(keywords):
@@ -70,6 +72,7 @@ def meta_command(keywords):
     """
     global TABLES
     global TIMER
+    keywords_as_string = " ".join(keywords)
     if keywords[0] == ".import":
         if len(keywords) == 3:
             [file_name, table_name] = keywords[1:]
@@ -77,11 +80,15 @@ def meta_command(keywords):
             TABLES += [table_to_add]
     elif keywords[0] == ".help":
         get_help()
-    elif len(keywords) > 1 and keywords[0] == ".timer" and keywords[1] == "on":
-        TIMER = True
+    elif len(keywords) > 1 and keywords[0] == ".timer":
+        if keywords[1] == "on":
+            TIMER = True
+        elif keywords[1] == "off":
+            TIMER = False
+        else:
+            print(f"Didn't recognize command {keywords_as_string}")
     else:
-        print("Didn't recognize command " + keywords[0])
-
+        print("Didn't recognize command {keywords_as_string}")
 
 USER_INPUT = input("harkdb> ")
 while USER_INPUT != ".exit":
