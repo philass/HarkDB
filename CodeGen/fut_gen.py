@@ -22,6 +22,58 @@ def query_to_representation(tables, query):
         # and agg functions are in select cols
         # Return format -> [agg idxs], [group by cols idxs in select], [group by cols in groupby], table
 
+def groupby_select_rep(table, select, groupby):
+    """
+    Get structured outpout of groupby statements, select statements
+    Takes table, select array, and groupby array as inputs
+
+    Returns
+
+    """
+    table_schema = table.get_schema()
+    for col in groupby:
+        if col not in table.get_schema():
+            raise "Column not in Scema!"
+    select_dic = {}
+    for colu in select:
+        col = colu.replace(" ", "")
+        if col in table_schema:
+            if col in groupby:
+                select_dic[col] = "reg"
+            else:
+                raise "Not in group by"
+        elif col[-1] == ")":
+            if col[0:4] == "max(":
+                col_name = col[4:-1]
+                if col_name in table_schema:
+                    select_dic[col_name] = "max"
+                else:
+                    raise f"{col_name} not in table"
+            elif col[0:4] == "min(":
+                col_name = col[4:-1]
+                if col_name in table_schema:
+                    select_dic[col_name] = "min"
+                else:
+                    raise f"{col_name} not in table"
+            elif col[0:4] == "sum(":
+                col_name = col[4:-1]
+                if col_name in table_schema:
+                    select_dic[col_name] = "sum"
+                else:
+                    raise f"{col_name} not in table"
+            elif col[0:6] == "count(":
+                col_name = col[6:-1]
+                if col_name in table_schema:
+                    select_dic[col_name] = "count"
+                else:
+                    raise f"{col_name} not in table"
+            else:
+                raise f"{col} not in table"
+        else:
+            raise f"{col} not in table"
+    return groupby, select_dic
+
+
 class Representation:
     """
     Representation of the Query
