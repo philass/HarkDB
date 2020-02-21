@@ -12,15 +12,15 @@ def query_to_representation(tables, query):
             table = tbl
     header = table.get_schema()
     groupby = query.get_group_by()
+    cols = query.get_select()
     if groupby == []:
-        cols = query.get_select()
         idxs = [header.index(c) for c in cols]
-        return (table, idxs)
+        return ("select_where", table, idxs)
     else:
+        select_dic = groupby_select_rep(table, cols, groupby)
+        select_idx_dic = {header.index(c) : select_dic[c] for c in select_dic.keys()}
         groupby_col_idxs = [header.index(c) for c in groupby]
-        # Check that only group by columns 
-        # and agg functions are in select cols
-        # Return format -> [agg idxs], [group by cols idxs in select], [group by cols in groupby], table
+        return ("select_where_groupby", table, (select_idx_dic, groupby_cols_idxs))
 
 def groupby_select_rep(table, select, groupby):
     """
@@ -71,7 +71,7 @@ def groupby_select_rep(table, select, groupby):
                 raise f"{col} not in table"
         else:
             raise f"{col} not in table"
-    return groupby, select_dic
+    return select_dic
 
 
 class Representation:
@@ -79,7 +79,13 @@ class Representation:
     Representation of the Query
     """
     def __init__(self, tables, query):
-        (table, idxs) = query_to_representation(tables, query)
+        (typ, table, idxs) = query_to_representation(tables, query)
+        print("DEBUG LINES")
+        print(typ, table, idxs)
+        if typ == "select_where_groupby":
+            dic, gb = idxs
+            print(f"select dictionary : dic")
+            print(f"groupby idxs : gb")
         self._where = query.get_where()
         self._group_by = query.get_group_by()
         print(query)
@@ -137,17 +143,27 @@ class Representation:
         Generates Futhark code for the SQL Query
         based on the internal Representation
         """
-        select_header = "let select (cols : []i32) (row : []f32) : []f32 = \n"
-        select_s1 = "  let f = (\\i -> unsafe row[i])\n"
-        select_s2 = "  in map f cols\n"
-        select_from_header = "entry select_from_where (db : [][]f32) (cols : []i32) : [][]f32 =\n"
-        where_part = self.where_rewrite()
-        result = "  in map (select cols) keep\n"
-        fut_file = open("futhark/db_sel.fut", "w+")
-        fut_file.write(select_header)
-        fut_file.write(select_s1)
-        fut_file.write(select_s2)
-        fut_file.write("")
-        fut_file.write(select_from_header)
-        fut_file.write(where_part)
-        fut_file.write(result)
+        if typ = "select_where"
+            select_header = "let select (cols : []i32) (row : []f32) : []f32 = \n"
+            select_s1 = "  let f = (\\i -> unsafe row[i])\n"
+            select_s2 = "  in map f cols\n"
+            select_from_header = "entry select_from_where (db : [][]f32) (cols : []i32) : [][]f32 =\n"
+            where_part = self.where_rewrite()
+            result = "  in map (select cols) keep\n"
+            fut_file = open("futhark/db_sel.fut", "w+")
+            fut_file.write(select_header)
+            fut_file.write(select_s1)
+            fut_file.write(select_s2)
+            fut_file.write("")
+            fut_file.write(select_from_header)
+            fut_file.write(where_part)
+            fut_file.write(result)
+        elif typ == "select_where_groupby":
+            #TODO
+            print("Not implemted")
+        else:
+            print("We should not be here")
+        # Check that only group by columns 
+        # and agg functions are in select cols
+        # Return format -> [agg idxs], [group by cols idxs in select], [group by cols in groupby], table
+
