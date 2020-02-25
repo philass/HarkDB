@@ -13,7 +13,7 @@ int main() {
   struct futhark_i32_1d *y_arr = futhark_new_i32_1d(ctx, y, 4);
 
   int res;
-  futhark_entry_dotprod(ctx, &res, x_arr, y_arr);
+  futhark_entry_main(ctx, &res, x_arr, y_arr);
   futhark_context_sync(ctx);
 
   printf("Result: %d\n", res);
