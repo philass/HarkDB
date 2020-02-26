@@ -27,7 +27,7 @@ static void panic(int eval, const char *fmt, ...)
 static char* msgprintf(const char *s, ...) {
   va_list vl;
   va_start(vl, s);
-  size_t needed = 1 + vsnprintf(NULL, 0, s, vl);
+  size_t needed = 1 + (size_t)vsnprintf(NULL, 0, s, vl);
   char *buffer = (char*) malloc(needed);
   va_start(vl, s); /* Must re-init. */
   vsnprintf(buffer, needed, s, vl);
@@ -147,7 +147,7 @@ struct memblock {
 struct futhark_context_config {
     int debugging;
 } ;
-struct futhark_context_config *futhark_context_config_new()
+struct futhark_context_config *futhark_context_config_new(void)
 {
     struct futhark_context_config *cfg =
                                   (struct futhark_context_config *) malloc(sizeof(struct futhark_context_config));
@@ -170,8 +170,8 @@ void futhark_context_config_set_logging(struct futhark_context_config *cfg,
                                         int detail)
 {
     /* Does nothing for this backend. */
-    cfg = cfg;
-    detail = detail;
+    (void) cfg;
+    (void) detail;
 }
 struct futhark_context {
     int detail_memory;
@@ -204,7 +204,7 @@ void futhark_context_free(struct futhark_context *ctx)
 }
 int futhark_context_sync(struct futhark_context *ctx)
 {
-    ctx = ctx;
+    (void) ctx;
     return 0;
 }
 char *futhark_context_get_error(struct futhark_context *ctx)
@@ -292,9 +292,9 @@ void futhark_debugging_report(struct futhark_context *ctx)
     if (ctx->profiling) { }
 }
 static int futrts_main(struct futhark_context *ctx,
-                       int32_t *out_scalar_out_4027, struct memblock x_mem_4023,
-                       struct memblock y_mem_4024, int32_t sizze_4003,
-                       int32_t sizze_4004);
+                       int32_t *out_scalar_out_4024, struct memblock x_mem_4020,
+                       struct memblock y_mem_4021, int32_t sizze_4000,
+                       int32_t sizze_4001);
 static inline int8_t add8(int8_t x, int8_t y)
 {
     return x + y;
@@ -619,67 +619,67 @@ static inline uint64_t xor64(uint64_t x, uint64_t y)
 {
     return x ^ y;
 }
-static inline char ult8(uint8_t x, uint8_t y)
+static inline bool ult8(uint8_t x, uint8_t y)
 {
     return x < y;
 }
-static inline char ult16(uint16_t x, uint16_t y)
+static inline bool ult16(uint16_t x, uint16_t y)
 {
     return x < y;
 }
-static inline char ult32(uint32_t x, uint32_t y)
+static inline bool ult32(uint32_t x, uint32_t y)
 {
     return x < y;
 }
-static inline char ult64(uint64_t x, uint64_t y)
+static inline bool ult64(uint64_t x, uint64_t y)
 {
     return x < y;
 }
-static inline char ule8(uint8_t x, uint8_t y)
+static inline bool ule8(uint8_t x, uint8_t y)
 {
     return x <= y;
 }
-static inline char ule16(uint16_t x, uint16_t y)
+static inline bool ule16(uint16_t x, uint16_t y)
 {
     return x <= y;
 }
-static inline char ule32(uint32_t x, uint32_t y)
+static inline bool ule32(uint32_t x, uint32_t y)
 {
     return x <= y;
 }
-static inline char ule64(uint64_t x, uint64_t y)
+static inline bool ule64(uint64_t x, uint64_t y)
 {
     return x <= y;
 }
-static inline char slt8(int8_t x, int8_t y)
+static inline bool slt8(int8_t x, int8_t y)
 {
     return x < y;
 }
-static inline char slt16(int16_t x, int16_t y)
+static inline bool slt16(int16_t x, int16_t y)
 {
     return x < y;
 }
-static inline char slt32(int32_t x, int32_t y)
+static inline bool slt32(int32_t x, int32_t y)
 {
     return x < y;
 }
-static inline char slt64(int64_t x, int64_t y)
+static inline bool slt64(int64_t x, int64_t y)
 {
     return x < y;
 }
-static inline char sle8(int8_t x, int8_t y)
+static inline bool sle8(int8_t x, int8_t y)
 {
     return x <= y;
 }
-static inline char sle16(int16_t x, int16_t y)
+static inline bool sle16(int16_t x, int16_t y)
 {
     return x <= y;
 }
-static inline char sle32(int32_t x, int32_t y)
+static inline bool sle32(int32_t x, int32_t y)
 {
     return x <= y;
 }
-static inline char sle64(int64_t x, int64_t y)
+static inline bool sle64(int64_t x, int64_t y)
 {
     return x <= y;
 }
@@ -795,7 +795,7 @@ static inline int64_t btoi_bool_i64(bool x)
 #define zext_i64_i16(x) ((uint16_t) (uint64_t) x)
 #define zext_i64_i32(x) ((uint32_t) (uint64_t) x)
 #define zext_i64_i64(x) ((uint64_t) (uint64_t) x)
-#ifdef __OPENCL_VERSION__
+#if defined(__OPENCL_VERSION__)
 int32_t futrts_popc8(int8_t x)
 {
     return popcount(x);
@@ -812,7 +812,7 @@ int32_t futrts_popc64(int64_t x)
 {
     return popcount(x);
 }
-#elif __CUDA_ARCH__
+#elif defined(__CUDA_ARCH__)
 int32_t futrts_popc8(int8_t x)
 {
     return __popc(zext_i8_i32(x));
@@ -863,7 +863,7 @@ int32_t futrts_popc64(int64_t x)
     return c;
 }
 #endif
-#ifdef __OPENCL_VERSION__
+#if defined(__OPENCL_VERSION__)
 int32_t futrts_clzz8(int8_t x)
 {
     return clz(x);
@@ -880,7 +880,7 @@ int32_t futrts_clzz64(int64_t x)
 {
     return clz(x);
 }
-#elif __CUDA_ARCH__
+#elif defined(__CUDA_ARCH__)
 int32_t futrts_clzz8(int8_t x)
 {
     return __clz(zext_i8_i32(x)) - 24;
@@ -979,77 +979,77 @@ static inline float fpow32(float x, float y)
 {
     return pow(x, y);
 }
-static inline char cmplt32(float x, float y)
+static inline bool cmplt32(float x, float y)
 {
     return x < y;
 }
-static inline char cmple32(float x, float y)
+static inline bool cmple32(float x, float y)
 {
     return x <= y;
 }
 static inline float sitofp_i8_f32(int8_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline float sitofp_i16_f32(int16_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline float sitofp_i32_f32(int32_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline float sitofp_i64_f32(int64_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline float uitofp_i8_f32(uint8_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline float uitofp_i16_f32(uint16_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline float uitofp_i32_f32(uint32_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline float uitofp_i64_f32(uint64_t x)
 {
-    return x;
+    return (float) x;
 }
 static inline int8_t fptosi_f32_i8(float x)
 {
-    return x;
+    return (int8_t) x;
 }
 static inline int16_t fptosi_f32_i16(float x)
 {
-    return x;
+    return (int16_t) x;
 }
 static inline int32_t fptosi_f32_i32(float x)
 {
-    return x;
+    return (int32_t) x;
 }
 static inline int64_t fptosi_f32_i64(float x)
 {
-    return x;
+    return (int64_t) x;
 }
 static inline uint8_t fptoui_f32_i8(float x)
 {
-    return x;
+    return (uint8_t) x;
 }
 static inline uint16_t fptoui_f32_i16(float x)
 {
-    return x;
+    return (uint16_t) x;
 }
 static inline uint32_t fptoui_f32_i32(float x)
 {
-    return x;
+    return (uint32_t) x;
 }
 static inline uint64_t fptoui_f32_i64(float x)
 {
-    return x;
+    return (uint64_t) x;
 }
 static inline double fdiv64(double x, double y)
 {
@@ -1079,93 +1079,93 @@ static inline double fpow64(double x, double y)
 {
     return pow(x, y);
 }
-static inline char cmplt64(double x, double y)
+static inline bool cmplt64(double x, double y)
 {
     return x < y;
 }
-static inline char cmple64(double x, double y)
+static inline bool cmple64(double x, double y)
 {
     return x <= y;
 }
 static inline double sitofp_i8_f64(int8_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline double sitofp_i16_f64(int16_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline double sitofp_i32_f64(int32_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline double sitofp_i64_f64(int64_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline double uitofp_i8_f64(uint8_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline double uitofp_i16_f64(uint16_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline double uitofp_i32_f64(uint32_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline double uitofp_i64_f64(uint64_t x)
 {
-    return x;
+    return (double) x;
 }
 static inline int8_t fptosi_f64_i8(double x)
 {
-    return x;
+    return (int8_t) x;
 }
 static inline int16_t fptosi_f64_i16(double x)
 {
-    return x;
+    return (int16_t) x;
 }
 static inline int32_t fptosi_f64_i32(double x)
 {
-    return x;
+    return (int32_t) x;
 }
 static inline int64_t fptosi_f64_i64(double x)
 {
-    return x;
+    return (int64_t) x;
 }
 static inline uint8_t fptoui_f64_i8(double x)
 {
-    return x;
+    return (uint8_t) x;
 }
 static inline uint16_t fptoui_f64_i16(double x)
 {
-    return x;
+    return (uint16_t) x;
 }
 static inline uint32_t fptoui_f64_i32(double x)
 {
-    return x;
+    return (uint32_t) x;
 }
 static inline uint64_t fptoui_f64_i64(double x)
 {
-    return x;
+    return (uint64_t) x;
 }
 static inline float fpconv_f32_f32(float x)
 {
-    return x;
+    return (float) x;
 }
 static inline double fpconv_f32_f64(float x)
 {
-    return x;
+    return (double) x;
 }
 static inline float fpconv_f64_f32(double x)
 {
-    return x;
+    return (float) x;
 }
 static inline double fpconv_f64_f64(double x)
 {
-    return x;
+    return (double) x;
 }
 static inline float futrts_log32(float x)
 {
@@ -1223,11 +1223,11 @@ static inline float futrts_lgamma32(float x)
 {
     return lgamma(x);
 }
-static inline char futrts_isnan32(float x)
+static inline bool futrts_isnan32(float x)
 {
     return isnan(x);
 }
-static inline char futrts_isinf32(float x)
+static inline bool futrts_isinf32(float x)
 {
     return isinf(x);
 }
@@ -1362,11 +1362,11 @@ static inline double futrts_floor64(double x)
 {
     return floor(x);
 }
-static inline char futrts_isnan64(double x)
+static inline bool futrts_isnan64(double x)
 {
     return isnan(x);
 }
-static inline char futrts_isinf64(double x)
+static inline bool futrts_isinf64(double x)
 {
     return isinf(x);
 }
@@ -1406,40 +1406,40 @@ static inline double futrts_lerp64(double v0, double v1, double t)
 }
 #endif
 static int futrts_main(struct futhark_context *ctx,
-                       int32_t *out_scalar_out_4027, struct memblock x_mem_4023,
-                       struct memblock y_mem_4024, int32_t sizze_4003,
-                       int32_t sizze_4004)
+                       int32_t *out_scalar_out_4024, struct memblock x_mem_4020,
+                       struct memblock y_mem_4021, int32_t sizze_4000,
+                       int32_t sizze_4001)
 {
-    int32_t scalar_out_4025;
-    bool dim_zzero_4007 = 0 == sizze_4004;
-    bool dim_zzero_4008 = 0 == sizze_4003;
-    bool both_empty_4009 = dim_zzero_4007 && dim_zzero_4008;
-    bool dim_match_4010 = sizze_4003 == sizze_4004;
-    bool empty_or_match_4011 = both_empty_4009 || dim_match_4010;
-    bool empty_or_match_cert_4012;
+    int32_t scalar_out_4022;
+    bool dim_zzero_4004 = 0 == sizze_4001;
+    bool dim_zzero_4005 = 0 == sizze_4000;
+    bool both_empty_4006 = dim_zzero_4004 && dim_zzero_4005;
+    bool dim_match_4007 = sizze_4000 == sizze_4001;
+    bool empty_or_match_4008 = both_empty_4006 || dim_match_4007;
+    bool empty_or_match_cert_4009;
     
-    if (!empty_or_match_4011) {
-        ctx->error = msgprintf("Error at %s:\n%s\n",
-                               "dotprod.fut:1:1-2:29 -> dotprod.fut:2:17-28",
-                               "function arguments of wrong shape");
+    if (!empty_or_match_4008) {
+        ctx->error = msgprintf("Error: %s\n\nBacktrace:\n%s",
+                               "function arguments of wrong shape",
+                               "-> #0  dotprod.fut:2:17-28\n   #1  dotprod.fut:1:1-2:29\n");
         return 1;
     }
     
-    int32_t res_4014;
-    int32_t redout_4021 = 0;
+    int32_t res_4011;
+    int32_t redout_4018 = 0;
     
-    for (int32_t i_4022 = 0; i_4022 < sizze_4003; i_4022++) {
-        int32_t x_4018 = ((int32_t *) x_mem_4023.mem)[i_4022];
-        int32_t x_4019 = ((int32_t *) y_mem_4024.mem)[i_4022];
-        int32_t res_4020 = x_4018 * x_4019;
-        int32_t res_4017 = res_4020 + redout_4021;
-        int32_t redout_tmp_4026 = res_4017;
+    for (int32_t i_4019 = 0; i_4019 < sizze_4000; i_4019++) {
+        int32_t x_4015 = ((int32_t *) x_mem_4020.mem)[i_4019];
+        int32_t x_4016 = ((int32_t *) y_mem_4021.mem)[i_4019];
+        int32_t res_4017 = x_4015 * x_4016;
+        int32_t res_4014 = res_4017 + redout_4018;
+        int32_t redout_tmp_4023 = res_4014;
         
-        redout_4021 = redout_tmp_4026;
+        redout_4018 = redout_tmp_4023;
     }
-    res_4014 = redout_4021;
-    scalar_out_4025 = res_4014;
-    *out_scalar_out_4027 = scalar_out_4025;
+    res_4011 = redout_4018;
+    scalar_out_4022 = res_4011;
+    *out_scalar_out_4024 = scalar_out_4022;
     return 0;
 }
 struct futhark_i32_1d {
@@ -1457,10 +1457,11 @@ struct futhark_i32_1d *futhark_new_i32_1d(struct futhark_context *ctx,
         return bad;
     lock_lock(&ctx->lock);
     arr->mem.references = NULL;
-    if (memblock_alloc(ctx, &arr->mem, dim0 * sizeof(int32_t), "arr->mem"))
+    if (memblock_alloc(ctx, &arr->mem, (size_t) dim0 * sizeof(int32_t),
+                       "arr->mem"))
         return NULL;
     arr->shape[0] = dim0;
-    memmove(arr->mem.mem + 0, data + 0, dim0 * sizeof(int32_t));
+    memmove(arr->mem.mem + 0, data + 0, (size_t) dim0 * sizeof(int32_t));
     lock_unlock(&ctx->lock);
     return arr;
 }
@@ -1476,10 +1477,11 @@ struct futhark_i32_1d *futhark_new_raw_i32_1d(struct futhark_context *ctx,
         return bad;
     lock_lock(&ctx->lock);
     arr->mem.references = NULL;
-    if (memblock_alloc(ctx, &arr->mem, dim0 * sizeof(int32_t), "arr->mem"))
+    if (memblock_alloc(ctx, &arr->mem, (size_t) dim0 * sizeof(int32_t),
+                       "arr->mem"))
         return NULL;
     arr->shape[0] = dim0;
-    memmove(arr->mem.mem + 0, data + offset, dim0 * sizeof(int32_t));
+    memmove(arr->mem.mem + 0, data + offset, (size_t) dim0 * sizeof(int32_t));
     lock_unlock(&ctx->lock);
     return arr;
 }
@@ -1496,7 +1498,8 @@ int futhark_values_i32_1d(struct futhark_context *ctx,
                           struct futhark_i32_1d *arr, int32_t *data)
 {
     lock_lock(&ctx->lock);
-    memmove(data + 0, arr->mem.mem + 0, arr->shape[0] * sizeof(int32_t));
+    memmove(data + 0, arr->mem.mem + 0, (size_t) arr->shape[0] *
+            sizeof(int32_t));
     lock_unlock(&ctx->lock);
     return 0;
 }
@@ -1516,29 +1519,29 @@ int futhark_entry_main(struct futhark_context *ctx, int32_t *out0, const
                        struct futhark_i32_1d *in0, const
                        struct futhark_i32_1d *in1)
 {
-    struct memblock x_mem_4023;
+    struct memblock x_mem_4020;
     
-    x_mem_4023.references = NULL;
+    x_mem_4020.references = NULL;
     
-    struct memblock y_mem_4024;
+    struct memblock y_mem_4021;
     
-    y_mem_4024.references = NULL;
+    y_mem_4021.references = NULL;
     
-    int32_t sizze_4003;
-    int32_t sizze_4004;
-    int32_t scalar_out_4025;
+    int32_t sizze_4000;
+    int32_t sizze_4001;
+    int32_t scalar_out_4022;
     
     lock_lock(&ctx->lock);
-    x_mem_4023 = in0->mem;
-    sizze_4003 = in0->shape[0];
-    y_mem_4024 = in1->mem;
-    sizze_4004 = in1->shape[0];
+    x_mem_4020 = in0->mem;
+    sizze_4000 = in0->shape[0];
+    y_mem_4021 = in1->mem;
+    sizze_4001 = in1->shape[0];
     
-    int ret = futrts_main(ctx, &scalar_out_4025, x_mem_4023, y_mem_4024,
-                          sizze_4003, sizze_4004);
+    int ret = futrts_main(ctx, &scalar_out_4022, x_mem_4020, y_mem_4021,
+                          sizze_4000, sizze_4001);
     
     if (ret == 0) {
-        *out0 = scalar_out_4025;
+        *out0 = scalar_out_4022;
     }
     lock_unlock(&ctx->lock);
     return ret;

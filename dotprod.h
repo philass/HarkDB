@@ -14,7 +14,7 @@
 */
 
 struct futhark_context_config ;
-struct futhark_context_config *futhark_context_config_new();
+struct futhark_context_config *futhark_context_config_new(void);
 void futhark_context_config_free(struct futhark_context_config *cfg);
 void futhark_context_config_set_debugging(struct futhark_context_config *cfg,
                                           int flag);
