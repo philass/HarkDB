@@ -1,3 +1,4 @@
+open import "lib/github.com/diku-dk/segmented/segmented"
 -- Contains GROUP BY CODE
 
 
@@ -26,31 +27,33 @@ let rsort [n][m] (xs: [n][m]u32): [n][m]u32 =
 let mk_flags [n] (row_ids: [n]u32): [n]u32 =
   let idxs = iota n
   let vals = map (\i ->   if i == 0
-  			  then 0
+  			  then 1
 			  else (if row_ids[i-1] != row_ids[i] 
 			  	then 1
 				else 0)) idxs
   in vals
 
 
-let f (s_cols: []i32) (a: []u32) (b: []u32) = map2 (+) a  b --map (\i -> a[i] + b[i]) s_cols
+let f  (a: []u32) (b: []u32) = map2 (+) a  b --map (\i -> a[i] + b[i]) s_cols
 
 
-let mapping [n] (idxs: [n]i32) (vals: [n]i32) = map2 (\x y -> ([x], [y])) idxs vals
-
-let reduce_f ((x1: []i32), (y1: []i32)) ((x2: []i32), (y2: []i32)) = 
-  if (x1,y1) == ([0], [0]) then (x2, y2)
-  else 
-  if (x2,y2) == ([0], [0]) then (x1, y1)
-  else
-  if last y1 == head y2
-  then ((concat x1 (map (+ (last x1)) x2)), concat y1 y2)
-  else ((concat x1 (map (+ 1 + (last x1)) x2)), concat y1 y2)
-  
+--let mapping [n] (idxs: [n]i32) (vals: [n]i32) = map2 (\x y -> ([x], [y])) idxs vals
+--
+--let reduce_f ((x1: []i32), (y1: []i32)) ((x2: []i32), (y2: []i32)) = 
+--  if (x1,y1) == ([0], [0]) then (x2, y2)
+--  else 
+--  if (x2,y2) == ([0], [0]) then (x1, y1)
+--  else
+--  if last y1 == head y2
+--  then ((concat x1 (map (+ (last x1)) x2)), concat y1 y2)
+--  else ((concat x1 (map (+ 1 + (last x1)) x2)), concat y1 y2)
+--  
 
 --
 let main (db : [][]u32)  (s_cols: []i32) : [][]u32 =
   let sorted_rows = trace (rsort db) -- ideally pass groupby col here
   let idxs = trace (mk_flags sorted_rows[:, 0])
-  let red_idxs = trace (scan (+) 0 idxs)
-  in reduce_by_index (copy sorted_rows) (f s_cols) (replicate (length db[0, :]) 0) (map i32.u32 (copy red_idxs)) (copy sorted_rows)
+  let idxs_b = map (== 1) idxs
+  in segmented_reduce f (replicate (length db[0, :]) 0) idxs_b sorted_rows
+  --let red_idxs = trace (scan (+) 0 idxs)
+  --in reduce_by_index (copy sorted_rows) (f s_cols) (replicate (length db[0, :]) 0) (map i32.u32 (copy red_idxs)) (copy sorted_rows)
