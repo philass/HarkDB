@@ -22,8 +22,6 @@ let rsort [n][m] (xs: [n][m]u32): [n][m]u32 =
   loop (xs) for i < 32 do rsort_step(xs,i)
 
 
-
-
 --Make flag array (index new rows)
 let mk_flags [n] (row_ids: [n]u32): [n]u32 =
   let idxs = iota n
@@ -32,17 +30,27 @@ let mk_flags [n] (row_ids: [n]u32): [n]u32 =
 			  else (if row_ids[i-1] != row_ids[i] 
 			  	then 1
 				else 0)) idxs
-  in scan (+) 0 vals
+  in vals
 
 
-let f (s_cols: []i32) (a: []u32) (b: []u32) = map (\i -> a[i] + b[i]) s_cols
+let f (s_cols: []i32) (a: []u32) (b: []u32) = map2 (+) a  b --map (\i -> a[i] + b[i]) s_cols
 
---
-let groupby (db : [][]u32)  (s_cols: []i32) : [][]u32 =
-  let sorted_rows = rsort db -- ideally pass groupby col here
-  let idxs = mk_flags sorted_rows[:, 0]
-  let red_idxs = scan (+) 0 idxs
-  in reduce_by_index (copy sorted_rows) (f s_cols) (replicate (length db[0, :]) 0) (map i32.u32 (copy red_idxs)) (copy sorted_rows)
+
+let mapping [n] (idxs: [n]i32) (vals: [n]i32) = map2 (\x y -> ([x], [y])) idxs vals
+
+let reduce_f ((x1: []i32), (y1: []i32)) ((x2: []i32), (y2: []i32)) = 
+  if (x1,y1) == ([0], [0]) then (x2, y2)
+  else 
+  if (x2,y2) == ([0], [0]) then (x1, y1)
+  else
+  if last y1 == head y2
+  then ((concat x1 (map (+ (last x1)) x2)), concat y1 y2)
+  else ((concat x1 (map (+ 1 + (last x1)) x2)), concat y1 y2)
   
 
-
+--
+let main (db : [][]u32)  (s_cols: []i32) : [][]u32 =
+  let sorted_rows = trace (rsort db) -- ideally pass groupby col here
+  let idxs = trace (mk_flags sorted_rows[:, 0])
+  let red_idxs = trace (scan (+) 0 idxs)
+  in reduce_by_index (copy sorted_rows) (f s_cols) (replicate (length db[0, :]) 0) (map i32.u32 (copy red_idxs)) (copy sorted_rows)
