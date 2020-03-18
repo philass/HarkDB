@@ -33,27 +33,31 @@ let mk_flags [n] (row_ids: [n]u32): [n]u32 =
 				else 0)) idxs
   in vals
 
+let type_func (typ: i32) (v1 : u32)  (v2: u32) : u32 =
+	match typ
+	case 1 -> (*) v1 v2
+	case 2 -> (+) v1 v2
+	case 3 -> (u32.max) v1 v2
+	case 4 -> (u32.min) v1 v2
+	case _ -> (u32.min) v1 v2 -- TODO change to some panic function
 
-let f  (a: []u32) (b: []u32) = map2 (+) a  b --map (\i -> a[i] + b[i]) s_cols
 
+--let f  (a: []u32) (b: []u32) = map2 (+) a  b --map (\i -> a[i] + b[i]) s_cols
+let merge [n][m] (s_cols_t: [n]i32) (a: [m]u32) (b: [m]u32) : [m]u32 = 
+  map (\i -> if i == 0 then a[i]
+  		       else (type_func s_cols_t[i-1] a[i] b[i])
+      ) (iota m)
 
---let mapping [n] (idxs: [n]i32) (vals: [n]i32) = map2 (\x y -> ([x], [y])) idxs vals
---
---let reduce_f ((x1: []i32), (y1: []i32)) ((x2: []i32), (y2: []i32)) = 
---  if (x1,y1) == ([0], [0]) then (x2, y2)
---  else 
---  if (x2,y2) == ([0], [0]) then (x1, y1)
---  else
---  if last y1 == head y2
---  then ((concat x1 (map (+ (last x1)) x2)), concat y1 y2)
---  else ((concat x1 (map (+ 1 + (last x1)) x2)), concat y1 y2)
---  
+	
+let groupby [n][m][s][t] (db : [n][m]u32)  (cols: [s]i32)  (t_cols: [t]i32) : [][]u32 =
+  let keep_fun columns row = map (\i -> row[i]) columns
+  let keep = map (keep_fun cols) db
+  let sorted_rows = rsort keep -- ideally pass groupby col here
+  let idxs = mk_flags sorted_rows[:, 0]
+  let flag = map (== 1) idxs
+  let helper = merge t_cols
+  in segmented_reduce helper (replicate s 0)  flag sorted_rows
 
---
-let main (db : [][]u32)  (s_cols: []i32) : [][]u32 =
-  let sorted_rows = trace (rsort db) -- ideally pass groupby col here
-  let idxs = trace (mk_flags sorted_rows[:, 0])
-  let idxs_b = map (== 1) idxs
-  in segmented_reduce f (replicate (length db[0, :]) 0) idxs_b sorted_rows
-  --let red_idxs = trace (scan (+) 0 idxs)
-  --in reduce_by_index (copy sorted_rows) (f s_cols) (replicate (length db[0, :]) 0) (map i32.u32 (copy red_idxs)) (copy sorted_rows)
+let main db g_col s_cols t_cols = 
+  let cols = concat [g_col] s_cols
+  in groupby db cols t_cols
