@@ -1,9 +1,8 @@
-open import "lib/github.com/diku-dk/segmented/segmented"
 -- Contains GROUP BY CODE
-
-
---Groupby Functionality
---let groupby (db : [][]i64) (g_cols: []i32) (s_cols: []i32) : []i64 =
+--
+-- ==
+-- input @ dataset.data
+open import "lib/github.com/diku-dk/segmented/segmented"
 
 -- Radix sort helper function
 let rsort_step [n][m] (xs: [n][m]u32, bitn: i32): [n][m]u32 =
