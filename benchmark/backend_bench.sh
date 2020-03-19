@@ -31,6 +31,24 @@ futhark dataset $DB_BOUND -g $DB_TYPE $GCOL_BOUND \
 			  -g $TCOL_TYPE > ../futhark/dataset.data
 
 ls ../futhark/       # For Debugging purposes
+
+
+# Run with different backends
+
+# Sequential Comparison
+
+futhark bench --backend=python ../futhark/groupby.fut
+futhark bench --backend=c ../futhark/groupby.fut
+
+
+# Parralel Backend Comparison
+
 futhark bench --backend=pyopencl ../futhark/groupby.fut
+futhark bench --backend=opencl ../futhark/groupby.fut
+futhark bench --backend=cuda ../futhark/groupby.fut
 
+# Delete Files in Benchmarking process
 
+rm ../futhark/dataset.data
+rm ../futhark/groupby.c
+rm ../futhark/groupby
