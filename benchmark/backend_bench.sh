@@ -11,44 +11,63 @@
 # Set parameters for futhark
 # dataset generation
 
-DB_TYPE="[100][20]u32"
-DB_BOUND="--u32-bounds=0:100"
-GCOL_TYPE="i32"
-GCOL_BOUND="--i32-bounds=0:2"
-SCOL_TYPE="[4]i32"
-SCOL_BOUND="--i32-bounds=3:19"
-TCOL_TYPE="[4]i32"
-TCOL_BOUND="--i32-bounds=0:4"
+benchmark () {
+    # Run with different backends
+    
+    # Sequential Comparison
+    futhark bench --backend=python ../futhark/$1.fut
+    futhark bench --backend=c ../futhark/$1.fut
+   # Parralel Backend Comparison
+    futhark bench --backend=pyopencl ../futhark/$1.fut
+    futhark bench --backend=opencl ../futhark/$1.fut
+    futhark bench --backend=cuda ../futhark/$1.fut
+    
+    # Delete Files in Benchmarking process
+    
+    rm ../futhark/dataset_$1.data
+    rm ../futhark/$1.c
+    rm ../futhark/$1
+    
+}
 
-# Print Commands as they run
-set -x
+if [ "$1" = "-s" ]; 
+then
 
-# Create Dataset file for benchmarking
+    DB_TYPE="[100][20]u32"
+    DB_BOUND="--u32-bounds=0:100"
+    SCOL_TYPE="[4]i32"
+    SCOL_BOUND="--i32-bounds=3:19"
+    futhark dataset $DB_BOUND -g $DB_TYPE $SCOL_BOUND \
+    			      -g $SCOL_TYPE > ../futhark/dataset_select_where.data
+    
+    ls ../futhark/       # For Debugging purposes
+    benchmark select_where
 
-futhark dataset $DB_BOUND -g $DB_TYPE $GCOL_BOUND \
-			  -g $GCOL_TYPE $SCOL_BOUND \
-                          -g $SCOL_TYPE $TCOL_BOUND \
-			  -g $TCOL_TYPE > ../futhark/dataset.data
+elif [ "$1" = "-g" ]; 
+then
 
-ls ../futhark/       # For Debugging purposes
+    DB_TYPE="[100][20]u32"
+    DB_BOUND="--u32-bounds=0:100"
+    GCOL_TYPE="i32"
+    GCOL_BOUND="--i32-bounds=0:2"
+    SCOL_TYPE="[4]i32"
+    SCOL_BOUND="--i32-bounds=3:19"
+    TCOL_TYPE="[4]i32"
+    TCOL_BOUND="--i32-bounds=0:4"
+    
+    # Print Commands as they run
+    set -x
+    
+    # Create Dataset file for benchmarking
+    
+    futhark dataset $DB_BOUND -g $DB_TYPE $GCOL_BOUND \
+    			      -g $GCOL_TYPE $SCOL_BOUND \
+                              -g $SCOL_TYPE $TCOL_BOUND \
+    			      -g $TCOL_TYPE > ../futhark/dataset_groupby.data
+    
+    ls ../futhark/       # For Debugging purposes
+    benchmark groupby    
 
-
-# Run with different backends
-
-# Sequential Comparison
-
-futhark bench --backend=python ../futhark/groupby.fut
-futhark bench --backend=c ../futhark/groupby.fut
-
-
-# Parralel Backend Comparison
-
-futhark bench --backend=pyopencl ../futhark/groupby.fut
-futhark bench --backend=opencl ../futhark/groupby.fut
-futhark bench --backend=cuda ../futhark/groupby.fut
-
-# Delete Files in Benchmarking process
-
-rm ../futhark/dataset.data
-rm ../futhark/groupby.c
-rm ../futhark/groupby
+else
+    echo "Pass -g or -s Flag"
+fi

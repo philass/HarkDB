@@ -1,7 +1,7 @@
 -- Contains GROUP BY CODE
 --
 -- ==
--- input @ dataset.data
+-- input @ dataset_groupby.data
 open import "lib/github.com/diku-dk/segmented/segmented"
 
 -- Radix sort helper function
