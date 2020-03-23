@@ -1,0 +1,6 @@
+language: php
+
+
+script:
+        - src/benchmark/backend_bench.sh
+
