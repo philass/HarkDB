@@ -1,5 +1,5 @@
 # HarkDB
-
+https://travis-ci.org/philiplassen/HarkDB.svg?branch=master
 
 HarkDB is a Multi-backend highly parallel Query Engine. HarkDB is written in [Futhark](https://github.com/diku-dk/futhark), 
 which allows it to compile down to a CUDA, OpenCL, or sequential C backend. 
