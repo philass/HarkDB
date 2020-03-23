@@ -2,5 +2,5 @@ language: php
 
 
 script:
-        - src/benchmark/backend_bench.sh
+        - benchmark/backend_bench.sh
 
