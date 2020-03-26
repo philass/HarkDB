@@ -7,8 +7,8 @@ shared_lib: build/select_where.c build/select_where.h
 	gcc build/select_where.c -o build/lib_select_where.so -fPIC -shared
 
 # Generate output directory
-result: lib_select_where.so select_where_load.c
-	gcc build/lib_select_where.so build/select_where_load.c -o build/out
+result: build/lib_select_where.so db_gpu_load.c
+	gcc build/lib_select_where.so  db_gpu_load.c -o build/out
 
 clean: 
 	rm -rf build/
