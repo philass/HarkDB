@@ -1,14 +1,14 @@
 go: fut_compile shared_lib result
 
-fut_compile: dotprod.fut
-	futhark c --library dotprod.fut
+fut_compile: futhark/select_where.fut
+	mkdir build && futhark c --library futhark/select_where.fut -o build/select_where
 
-shared_lib: dotprod.c dotprod.h
-	gcc dotprod.c -o libdotprod.so -fPIC -shared
+shared_lib: build/select_where.c build/select_where.h
+	gcc build/select_where.c -o build/lib_select_where.so -fPIC -shared
 
 # Generate output directory
-result: libdotprod.so luser.c
-	gcc libdotprod.so luser.c -o out
+result: lib_select_where.so select_where_load.c
+	gcc build/lib_select_where.so build/select_where_load.c -o build/out
 
-clean: libdotprod.so dotprod.c dotprod.h out
-	rm libdotprod.so dotprod.c dotprod.h out
+clean: 
+	rm -rf build/
