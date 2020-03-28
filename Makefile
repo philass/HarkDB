@@ -8,7 +8,7 @@ shared_lib: build/select_where.c build/select_where.h
 
 # Generate output directory
 result: build/lib_select_where.so db_gpu_load.c
-	gcc -g build/lib_select_where.so  db_gpu_load.c -o build/out
+	g++ -g build/lib_select_where.so  db_gpu_load.cpp -o build/out
 
 clean: 
 	rm -rf build/

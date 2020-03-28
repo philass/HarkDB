@@ -1,6 +1,11 @@
 #include <stdio.h>
-#include "build/select_where.h"
 #include <stdlib.h>
+
+extern "C" {
+
+#include "build/select_where.h"
+
+}
 
 struct context {
 	struct futhark_context_config *cfg;
@@ -39,7 +44,8 @@ int main() {
   
   futhark_entry_main(ctx, &result, db_arr, y_arr);
   futhark_context_sync(ctx);
-  
+ 
+  // NEED TO FIX THIS SO THAT IT ALLOCATES BASED ON RESULT SIZE AND NOT JUST 4
   uint32_t* data = (uint32_t *) malloc (sizeof(uint32_t) * 4);
   futhark_values_u32_2d(ctx, result, data);
   for (int i = 0; i < 4; i++) {
