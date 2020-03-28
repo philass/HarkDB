@@ -1,3 +1,7 @@
+/*
+ * Contains functionality for parsing a csv file
+ * and loading it into a vector
+ */
 #include <vector>
 #include <string>
 #include <sstream>
