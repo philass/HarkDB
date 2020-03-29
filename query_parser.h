@@ -2,6 +2,9 @@
  * Header file for QueryRepresentation.cpp
  */
 
+#ifndef QUERYREPRESENTATION_H
+#define QUERYREPRESENTATION_H
+
 #include <string>
 #include <vector>
 
@@ -30,9 +33,7 @@ class QueryRepresentation
 		std::vector<uint64_t> getGroupbyColumnsType();
 
 		std::string getFromTable();
-}
+};
 	
 	
-
-
-
+#endif
