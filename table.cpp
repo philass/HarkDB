@@ -9,27 +9,42 @@
 #include <iostream>
 #include <algorithm>
 
-Table::Table(std::string fileName, char delimiter=',')
+#include "table.h"
+
+
+
+Table::Table(std::string fileName, char delimiter)
 {
 
-	std::vector<<std::vector<uint32_t>> tableData;
+	std::vector<std::vector<uint32_t>> tableData;
 	std::ifstream input(fileName);
 	std::string headerLine;
 	std::getline(input, headerLine);
-	Table::headers = parseLine(headerLine, delimiter);
+	Table::headers = parseLine<std::string>(headerLine, delimiter);
 	for (std::string line; std::getline(input, line) ; ) {
-		std::vector<uint32_t> dataLine = parseLine(line, delimiter);
-		tableData.push_back(tableData);
+		std::vector<uint32_t> dataLine = parseLine<uint32_t>(line, delimiter);
+		tableData.push_back(dataLine);
 	}
 	Table::data = tableData;
 }
 
+/*
+std::vector<std::vector<uint32_t>> getData()
+{
+	return Table::data;
+}
+
+std::vector<std::string> getHeaders()
+{
+	return Table::headers;
+}
+*/
 
 /** 
  * Parse Line into vector of appropriate types
  */
 template <typename T>
-std::vector<T> parseLine(std::string, delimiter) {
+std::vector<T> parseLine(std::string line, char delimiter) {
 	std::vector<T> lineData;
 	std::stringstream ss;
 	std::replace(line.begin(), line.end(), delimiter, ' ');
@@ -43,9 +58,7 @@ std::vector<T> parseLine(std::string, delimiter) {
 		}
 		temp = "";
 	}
-	tableData.push_back(lineData);
-	return parseLine;
+	return lineData;
 }
-
 
 
