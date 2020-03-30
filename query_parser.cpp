@@ -7,13 +7,16 @@
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <unordered_map>
 
+#include "table.h"
 #include "query_parser.h"
+
 
 /* 
  * Implementation of QueryRepresentation Constructor
  */
-QueryRepresentation::QueryRepresentation(std::string query) {
+QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<std::string, Table> tables) {
 	
 	// Steps split lines up from select -> get everything between
 	std::vector<std::string> selects;
@@ -52,18 +55,9 @@ QueryRepresentation::QueryRepresentation(std::string query) {
 			}
 		}
 	}
-	std::cout << "printing select values" << std::endl;
-	for (std::string s : selects) {
-		std::cout << s << std::endl;	
-	}
-	std::cout << "printing groupby values" << std::endl;
-	for (std::string s : groupbys) {
-		std::cout << s << std::endl;	
-	}
-	std::cout << "printing from values" << std::endl;
-	for (std::string s : froms) {
-		std::cout << s << std::endl;	
-	}
-	
+}
+
+int main() {
+	std::cout << "It compiles" << std::endl;
 }
 

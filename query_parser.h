@@ -7,6 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+
+#include "table.h"
 
 class QueryRepresentation
 {
@@ -24,7 +27,7 @@ class QueryRepresentation
 		// Need a Where Clause representation
 	
 	public:
-		QueryRepresentation(std::string query);
+		QueryRepresentation(std::string query, std::unordered_map<std::string, Table> tables);
 
 		std::vector<uint64_t> getSelectColumns();
 		
