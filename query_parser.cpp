@@ -58,12 +58,12 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 	}
 
 	// Assumes we are only using one table in 
-	std::vector<uint64_t> selCols;
+	std::vector<int> selCols;
 	if (froms.size() == 1) {
 		Table table = tables.at(froms[0]);
 		std::vector<std::string> headers = table.getHeaders();
 		for (std::string val : selects) {
-			uint64_t pos = headers.size();
+			int pos = headers.size();
 			for (int i = 0; i < headers.size(); i++) {
 				if (headers[i] == val) {
 					pos = i;
@@ -72,7 +72,7 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 			if (pos > headers.size()) {
 				throw "Column : " + val + " : was not in : " + froms[0];
 			} 
-			uint64_t idx = pos;
+			int idx = pos;
 			selCols.push_back(idx);
 		}
 		fromTable = froms[0];
@@ -82,5 +82,4 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 	} else {
 		throw "Multi table statements not currently supported";
 	}
-		
 }

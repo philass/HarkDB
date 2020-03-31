@@ -14,7 +14,7 @@ TEST(QueryRepresentationTest, ResultTest) {
 	Table table("tests/resources/DataTest.csv", ',');
 	umap.insert(std::make_pair("t1", table));
 	QueryRepresentation qr("select col3, col5 from t1 groupby col3", umap);
-	std::vector<uint64_t> cols = {2, 4};
+	std::vector<int> cols = {2, 4};
 	EXPECT_TRUE(qr.getFromTable() == "t1");
 	EXPECT_TRUE(qr.getSelectColumns() == cols);
 }

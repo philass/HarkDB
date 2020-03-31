@@ -14,7 +14,7 @@
 class QueryRepresentation
 {
 	private:
-		std::vector<uint64_t> selectColumns;
+		std::vector<int> selectColumns;
 		
 		std::vector<uint64_t> groupbyColumns;
 
@@ -29,7 +29,7 @@ class QueryRepresentation
 	public:
 		QueryRepresentation(std::string query, std::unordered_map<std::string, Table> tables);
 
-		std::vector<uint64_t> getSelectColumns() {
+		std::vector<int> getSelectColumns() {
 			return selectColumns;
 		}
 		
