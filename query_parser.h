@@ -29,13 +29,17 @@ class QueryRepresentation
 	public:
 		QueryRepresentation(std::string query, std::unordered_map<std::string, Table> tables);
 
-		std::vector<uint64_t> getSelectColumns();
+		std::vector<uint64_t> getSelectColumns() {
+			return selectColumns;
+		}
 		
 		std::vector<uint64_t> getGroupbyColumns();
 
 		std::vector<uint64_t> getGroupbyColumnsType();
 
-		std::string getFromTable();
+		std::string getFromTable() {
+			return fromTable;
+		}
 };
 	
 	

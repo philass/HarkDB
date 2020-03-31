@@ -14,12 +14,6 @@ TEST(TableTest, DataTest) {
 	std::vector<std::string> headers = 
 	  {"col1", "col2", "col3", "col4", 
 	   "col5", "col6", "col7", "col8"};
-	for (auto i: headers)
-	  std::cout << i << ' ';
-	std::cout << std::endl;
-	std::cout << "Implementation result : ";
-	for (auto i: table.getHeaders())
-	  std::cout << i << ' ';
 	std::vector<std::vector<uint32_t> > data = 
 	 {{6, 6, 6, 6, 6, 6, 6, 6}, 
           {0,  0,  0,  0,  0,  0,  0,  0},
