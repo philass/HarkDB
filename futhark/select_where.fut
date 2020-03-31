@@ -1,3 +1,4 @@
+  
 -- File contains functions for handling SQL Queries
 --
 -- ==

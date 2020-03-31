@@ -3,17 +3,13 @@
 ##################################################
 # Script for running benchmarks of 
 # different Futhark backends
-# 
-# By Philip Lassen
 ##################################################
-
 
 # Set parameters for futhark
 # dataset generation
 
 benchmark () {
     # Run with different backends
-    
     # Sequential Comparison
     futhark bench --backend=python ../futhark/$1.fut
     futhark bench --backend=c ../futhark/$1.fut
@@ -21,18 +17,14 @@ benchmark () {
     futhark bench --backend=pyopencl ../futhark/$1.fut
     futhark bench --backend=opencl ../futhark/$1.fut
     futhark bench --backend=cuda ../futhark/$1.fut
-    
     # Delete Files in Benchmarking process
-    
     rm ../futhark/dataset_$1.data
     rm ../futhark/$1.c
     rm ../futhark/$1
-    
 }
 
 if [ "$1" = "-s" ]; 
 then
-
     DB_TYPE="[100][20]u32"
     DB_BOUND="--u32-bounds=0:100"
     SCOL_TYPE="[4]i32"
@@ -42,10 +34,8 @@ then
     
     ls ../futhark/       # For Debugging purposes
     benchmark select_where
-
 elif [ "$1" = "-g" ]; 
 then
-
     DB_TYPE="[100][20]u32"
     DB_BOUND="--u32-bounds=0:100"
     GCOL_TYPE="i32"
@@ -54,12 +44,9 @@ then
     SCOL_BOUND="--i32-bounds=3:19"
     TCOL_TYPE="[4]i32"
     TCOL_BOUND="--i32-bounds=0:4"
-    
     # Print Commands as they run
     set -x
-    
     # Create Dataset file for benchmarking
-    
     futhark dataset $DB_BOUND -g $DB_TYPE $GCOL_BOUND \
     			      -g $GCOL_TYPE $SCOL_BOUND \
                               -g $SCOL_TYPE $TCOL_BOUND \
@@ -67,7 +54,6 @@ then
     
     ls ../futhark/       # For Debugging purposes
     benchmark groupby    
-
 else
     echo "Pass -g or -s Flag"
 fi
