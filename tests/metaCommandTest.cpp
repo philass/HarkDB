@@ -13,9 +13,7 @@ TEST(MetaCommandTest, ImportTest) {
 	std::unordered_map<std::string, Table> umap;
 	std::string line = ".import tests/resources/DataTest.csv t1";
 	metaCommandParser(line, umap);
-	std::cout << "WE got here" << std::endl;
 	Table table = umap.at("t1");
-	std::cout << "We now are here" << std::endl;
 	std::vector<std::string> headers = 
 	  {"col1", "col2", "col3", "col4", 
 	   "col5", "col6", "col7", "col8"};
