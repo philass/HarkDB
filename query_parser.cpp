@@ -23,27 +23,79 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 	std::vector<std::string> selects;
 	std::vector<std::string> groupbys;
 	std::vector<std::string> froms;
+	std::vector<std::string> joins;
+	std::vector<std::string> wheres;
+	std::vector<std::string> orderbys;
+	std::vector<std::string> havings;
 	std::replace(query.begin(), query.end(), ',', ' ');
 	std::stringstream iss(query);
 	std::string word;
 	bool select = false;
 	bool groupby = false;
 	bool from = false;
+	bool join = false;
+	bool where = false;
+	bool orderby = false;
+	bool having = false;
 	
 	while (iss >> word) {
 		if (word == "select") {
 			select = true;
 			groupby = false;
 			from = false;
+			join = false;
+			where = false;
+			orderby = false;
+			having = false;
 		} else if (word == "groupby") {
 			select = false;
 			groupby = true;
 			from = false;
+			join = false;
+			where = false;
+			orderby = false;
+			having = false;
 		        	
 		} else if (word == "from") {
 			select = false;
 			groupby = false;
 			from = true;
+			join = false;
+			where = false;
+			orderby = false;
+			having = false;
+		} else if (word == "join") {
+			select = false;
+			groupby = false;
+			from = false;
+			join = true;
+			where = false;
+			orderby = false;
+			having = false;
+		} else if (word == "where") {
+			select = false;
+			groupby = false;
+			from = false;
+			join = false;
+			where = true;
+			orderby = false;
+			having = false;
+		} else if (word == "orderby") {
+			select = false;
+			groupby = false;
+			from = false;
+			join = false;
+			where = false;
+			orderby = true;
+			having = false;
+		} else if (word == "having") {
+			select = false;
+			groupby = false;
+			from = false;
+			join = false;
+			where = false;
+			orderby = false;
+			having = true;
 		} else {
 			if (select == true) {
 				selects.push_back(word);
@@ -51,6 +103,14 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 				groupbys.push_back(word);
 			} else if (from == true) {
 				froms.push_back(word);
+			} else if (join == true) {
+				joins.push_back(word);
+			} else if (where == true) {
+				wheres.push_back(word);
+			} else if (orderby == true) {
+				orderbys.push_back(word);
+			} else if (having == true) {
+				havings.push_back(word);
 			} else {
 				throw std::invalid_argument("Don't currently support : " + word);
 			}
