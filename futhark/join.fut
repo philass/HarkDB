@@ -43,12 +43,16 @@ let mk_flags_table [n] (row_ids: [n](u32, i32, i32)): [n]i32 =
   in vals
 
 let generate_pairs [n] (arr :[n](i32, i32)) : [](i32, i32) = 
-        let (t_arr1, t_arr2) = partition (\x -> x.1 == 1) arr
+        let (t_arr1, t_arr2) = partition (\x -> x.0 == 1) arr
 	let (_, arr1) = unzip t_arr1
 	let (_, arr2) = unzip t_arr2
-	in expand (\x->length arr2) (\x i -> (x, arr2[i])) arr1
+	in expand (\_->length arr2) (\x i -> (x, arr2[i])) arr1
 
 let dim_helper [n] (flags: [n]i32) : []i32 = segmented_reduce (+) 0 (map (== 1) flags) (replicate n 1)
+
+let select (cols : []i32) (row : []u32) : []u32 =
+  let f = (\i -> row[i])
+  in map f cols
 
 let join [n][m][s][t][l][k] (db1: [n][m]u32) (db2: [s][t]u32) 
 			    (col1: i32)  (col2: i32)
@@ -59,14 +63,21 @@ let join [n][m][s][t][l][k] (db1: [n][m]u32) (db2: [s][t]u32)
 	let sorted = rsort to_sort
 	let flags = mk_flags_col sorted
 	let f_lens = dim_helper flags
-	let fc = copy f_lens
+	let f_l = scan (+) 0 f_lens
+	let fc = copy f_l
 	let p_lens = scatter (rotate (-1) fc) [0] [0]
-	let inds = zip p_lens f_lens
+	let inds = zip p_lens f_l
 	let (_, k1, k2)  = unzip3 (copy sorted)
 	let sorted_copy = zip k1 k2
 	let pairs = loop acc = [] for (s, f) in inds do
 		concat acc (generate_pairs sorted_copy[s:f])
-	in pairs
+	let f r1 = select cols1 db1[r1, :]
+	let g r2 = select cols2 db2[r2, :]
+	let (p1s, p2s) = unzip pairs
+	let t1s = map f p1s
+        let t2s = map g p2s
+	in transpose (concat (transpose t1s) (transpose t2s))
+
 			
 				      
 
