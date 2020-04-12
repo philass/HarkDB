@@ -1,0 +1,65 @@
+dataset_groupby.data  futhark.pkg  groupby.c  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:      59.90μs (avg. of 10 runs; RSD: 0.13)
+OPENCL
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    3953.50μs (avg. of 10 runs; RSD: 0.31)
+Cuda
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    1970.70μs (avg. of 10 runs; RSD: 0.02)
+dataset_groupby.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:     523.20μs (avg. of 10 runs; RSD: 0.02)
+OPENCL
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    3246.90μs (avg. of 10 runs; RSD: 0.01)
+Cuda
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    2084.30μs (avg. of 10 runs; RSD: 0.02)
+dataset_groupby.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    5937.40μs (avg. of 10 runs; RSD: 0.02)
+OPENCL
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    3519.80μs (avg. of 10 runs; RSD: 0.01)
+Cuda
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    2406.10μs (avg. of 10 runs; RSD: 0.01)
+dataset_groupby.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:   52172.50μs (avg. of 10 runs; RSD: 0.04)
+OPENCL
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    9196.70μs (avg. of 10 runs; RSD: 0.01)
+Cuda
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:    7385.10μs (avg. of 10 runs; RSD: 0.01)
+dataset_groupby.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:  602272.10μs (avg. of 10 runs; RSD: 0.01)
+OPENCL
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:   56963.50μs (avg. of 10 runs; RSD: 0.02)
+Cuda
+Compiling ../futhark/groupby.fut...
+Results for ../futhark/groupby.fut:
+dataset dataset_groupby.data:   49256.60μs (avg. of 10 runs; RSD: 0.03)

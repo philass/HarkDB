@@ -1,0 +1,65 @@
+dataset_select_where.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:       3.00μs (avg. of 10 runs; RSD: 0.00)
+OPENCL
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      35.10μs (avg. of 10 runs; RSD: 0.15)
+Cuda
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      22.10μs (avg. of 10 runs; RSD: 0.15)
+dataset_select_where.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      30.00μs (avg. of 10 runs; RSD: 0.18)
+OPENCL
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      32.20μs (avg. of 10 runs; RSD: 0.05)
+Cuda
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      21.40μs (avg. of 10 runs; RSD: 0.03)
+dataset_select_where.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:     312.20μs (avg. of 10 runs; RSD: 0.05)
+OPENCL
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      92.90μs (avg. of 10 runs; RSD: 0.30)
+Cuda
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      24.30μs (avg. of 10 runs; RSD: 0.03)
+dataset_select_where.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:    1860.00μs (avg. of 10 runs; RSD: 0.14)
+OPENCL
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      73.40μs (avg. of 10 runs; RSD: 0.03)
+Cuda
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:      59.90μs (avg. of 10 runs; RSD: 0.02)
+dataset_select_where.data  futhark.pkg  groupby.fut  join.fut  lib  select_where.fut
+Sequentail C
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:   20684.30μs (avg. of 10 runs; RSD: 0.06)
+OPENCL
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:     587.90μs (avg. of 10 runs; RSD: 0.05)
+Cuda
+Compiling ../futhark/select_where.fut...
+Results for ../futhark/select_where.fut:
+dataset dataset_select_where.data:     399.60μs (avg. of 10 runs; RSD: 0.03)
