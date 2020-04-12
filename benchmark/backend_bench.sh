@@ -59,8 +59,29 @@ then
                               -g $SCOL_TYPE $TCOL_BOUND \
     			      -g $TCOL_TYPE > ../futhark/dataset_groupby.data
     
-    ls ../futhark/       # For Debugging purposes
     benchmark groupby    
+elif [ "$1" = "-j" ]; 
+then
+    DB_TYPE="[100][20]u32"
+    DB_BOUND="--u32-bounds=0:100"
+    JCOL_TYPE="i32"
+    JCOL_BOUND="--i32-bounds=0:19"
+    SCOL_TYPE="[4]i32"
+    SCOL_BOUND="--i32-bounds=3:19"
+    
+    # Print Commands as they run
+    #   set -x
+
+
+    # Create Dataset file for benchmarking
+    futhark dataset $DB_BOUND -g $DB_TYPE $DB_BOUND \
+	    		      -g $DB_TYPE $JCOL_BOUND \
+    			      -g $JCOL_TYPE $JCOL_BOUND \
+                              -g $JCOL_TYPE $SCOL_BOUND \
+                              -g $SCOL_TYPE $SCOL_BOUND \
+    			      -g $SCOL_TYPE > ../futhark/dataset_join.data
+    
+    benchmark join    
 else
-    echo "Pass -g or -s Flag"
+    echo "Pass -g or -s or -j Flag"
 fi
