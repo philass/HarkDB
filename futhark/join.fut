@@ -33,14 +33,6 @@ let mk_flags_col [n] (row_ids: [n](u32, i32, i32)): [n]i32 =
 				else 0)) idxs
   in vals
 
-let mk_flags_table [n] (row_ids: [n](u32, i32, i32)): [n]i32 =
-  let idxs = iota n
-  let vals = map (\i ->   if i == 0
-  			  then row_ids[0].1
-			  else (if (row_ids[i-1]).1 != (row_ids[i]).1
-			  	then row_ids[i].1
-				else 0)) idxs
-  in vals
 
 let generate_pairs [n] (arr :[n](i32, i32)) : [](i32, i32) = 
         let (t_arr1, t_arr2) = partition (\x -> x.0 == 1) arr
@@ -50,9 +42,12 @@ let generate_pairs [n] (arr :[n](i32, i32)) : [](i32, i32) =
 
 let dim_helper [n] (flags: [n]i32) : []i32 = segmented_reduce (+) 0 (map (== 1) flags) (replicate n 1)
 
-let select (cols : []i32) (row : []u32) : []u32 =
+let select [k] (cols : [k]i32) (row : []u32) : [k]u32 =
   let f = (\i -> row[i])
   in map f cols
+
+--let map_helper [n][k][l] (v1 : [n][k]u32) (v2 : [n][l]u32) = 
+--	map2 (concat) v1 v2
 
 let join [n][m][s][t][l][k] (db1: [n][m]u32) (db2: [s][t]u32) 
 			    (col1: i32)  (col2: i32)
@@ -76,8 +71,6 @@ let join [n][m][s][t][l][k] (db1: [n][m]u32) (db2: [s][t]u32)
 	let (p1s, p2s) = unzip pairs
 	let t1s = map f p1s
         let t2s = map g p2s
-	in transpose (concat (transpose t1s) (transpose t2s))
-
-			
-				      
+	let tab_func i j = if j < l then t1s[i, j] else t2s[i, j - l]
+	in tabulate_2d (length t1s) (k + l) tab_func
 
