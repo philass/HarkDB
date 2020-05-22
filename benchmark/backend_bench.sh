@@ -33,10 +33,10 @@ then
 	    SCOL_TYPE="[4]i32"
 	    SCOL_BOUND="--i32-bounds=3:19"
 	    futhark dataset $DB_BOUND -g $DB_TYPE $SCOL_BOUND \
-				      -g $SCOL_TYPE > ../futhark/dataset_select_where.data
+				      -g $SCOL_TYPE > ../futhark/dataset_select.data
 	    
 	    ls ../futhark/       # For Debugging purposes
-	    benchmark select_where
+	    benchmark select
 	done
 elif [ "$1" = "-g" ]; 
 then
