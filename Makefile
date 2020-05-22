@@ -1,14 +1,14 @@
 fut: fut_compile fut_shared_lib fut_result 
 
-fut_compile: futhark/select_where.fut
-	mkdir -p build && futhark c --library futhark/select_where.fut -o build/select_where
+fut_compile: futhark/select.fut
+	mkdir -p build && futhark c --library futhark/select.fut -o build/select
 
-fut_shared_lib: build/select_where.c build/select_where.h
-	gcc build/select_where.c -o build/lib_select_where.so -fPIC -shared
+fut_shared_lib: build/select.c build/select.h
+	gcc build/select.c -o build/lib_select.so -fPIC -shared
 
 # Generate output directory
-fut_result: build/lib_select_where.so db_gpu_load.cpp table.cpp metaCommand.cpp query_parser.cpp CLI.cpp
-	g++ -std=c++11 build/lib_select_where.so  table.cpp db_gpu_load.cpp metaCommand.cpp query_parser.cpp CLI.cpp -o build/out
+fut_result: build/lib_select.so db_gpu_load.cpp table.cpp metaCommand.cpp query_parser.cpp CLI.cpp
+	g++ -std=c++11 build/lib_select.so  table.cpp db_gpu_load.cpp metaCommand.cpp query_parser.cpp CLI.cpp -o build/out
 
 tests: buildtests
 	./tests/tableTest.out

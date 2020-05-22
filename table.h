@@ -14,12 +14,12 @@ std::vector<T> parseLine(std::string line, char delimiter);
 class Table
 {
 private:
-	std::vector<std::vector<uint32_t>> data;
+	std::vector<std::vector<uint32_t> > data;
 	std::vector<std::string> headers;
 public:
 	Table(std::string fileName, char delimiter=',');
 
-	std::vector<std::vector<uint32_t>> getData() {
+	std::vector<std::vector<uint32_t> > getData() {
 		return data;
 	}
 

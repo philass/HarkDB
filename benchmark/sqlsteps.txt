@@ -1,6 +1,0 @@
-.timer on
-.mode csv
-.headers on
-.import data100.csv t1
-select c1 from t1;
-

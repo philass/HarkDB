@@ -13,7 +13,6 @@ void helpCommand() {
     //print(".timer on \t Turn SQL timer on or off")
 }
 
-
 void importTable(std::vector<std::string> words, std::unordered_map<std::string, Table> &tables) {
 	if (words.size() != 3) {
 		std::cout <<  "Usage: .import FILE TABLE" << std::endl;
@@ -36,5 +35,3 @@ void metaCommandParser(std::string line, std::unordered_map<std::string, Table> 
 		std::cout << command << " is not a currently supported command" << std::endl;
 	}
 }
-
-

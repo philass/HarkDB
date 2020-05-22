@@ -7,7 +7,7 @@
 
 extern "C" {
 
-#include "build/select_where.h"
+#include "build/select.h"
 
 }
 
@@ -20,6 +20,7 @@ struct context {
 void create_context(struct context* cont) {
   cont->cfg = futhark_context_config_new();
   cont->ctx = futhark_context_new(cont->cfg);
+
 }
 
 void free_context(struct context* cont) {

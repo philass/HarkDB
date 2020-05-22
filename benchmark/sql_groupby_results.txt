@@ -1,5 +1,0 @@
-Run Time: real 0.000 user 0.000187 sys 0.000008
-Run Time: real 0.000 user 0.000764 sys 0.000011
-Run Time: real 0.005 user 0.004868 sys 0.000094
-Run Time: real 0.051 user 0.050550 sys 0.000670
-Run Time: real 0.647 user 0.596648 sys 0.049646
