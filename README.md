@@ -20,18 +20,21 @@ HarkDB comes with a CLI. This CLI is meant to be functionaly similar to SQLite's
 
 - [Futhark Programming Language](https://github.com/diku-dk/futhark) 
 - OpenCL/CUDA (neccesary for parallel execution)
+- [CMake](https://cmake.org/download/) >= 3.11
 
 
-# Installation
+# Installation and Building
 
-Installing from this git repository is as simple as
+Installing and building this git repository is as simple as
 ```bash
-git clone https://github.com/philiplassen/HarkDB.git && make
+git clone https://github.com/philiplassen/HarkDB.git && cd HarkDB
+mkdir build && cd build
+cmake ..
 ```
 
 # Usage
 
-Simply use the following to spin up the CLI
+Simply use the following to spin up the CLI from the root directory
 ```bash
 build/out
 ```
@@ -55,8 +58,10 @@ harkdb> .exit
 
 # Tests
 
-The tests use [googletest](https://github.com/google/googletest). If properly installed the tests can be run with the following command
+The tests can be run with the following commands
 
 ```bash
-make tests
+cd build
+cmake ..
+make runtests
 ```

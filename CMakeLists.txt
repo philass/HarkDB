@@ -40,6 +40,27 @@ add_executable(out CLI.cpp  db_gpu_load.cpp db_gpu_load.h metaCommand.cpp
                             metaCommand.h query_parser.cpp query_parser.h
                             table.cpp table.h)
 
+
+#add_executable(tableTest table.h table.cpp ${CMAKE_CURRENT_SOURCE_DIR}/tests/table.cpp)
+add_executable(tableTest table.h table.cpp tests/tableTest.cpp)
+add_executable(queryRepTest table.h table.cpp query_parser.h 
+                        query_parser.cpp tests/queryRepTest.cpp)
+add_executable(metaCommandTest table.h table.cpp  metaCommand.cpp
+                            query_parser.h query_parser.cpp
+                            metaCommand.h tests/queryRepTest.cpp)
+
 target_link_libraries(out PRIVATE
     select
 )
+
+TARGET_LINK_LIBRARIES(tableTest LINK_PUBLIC gtest_main gtest) 
+TARGET_LINK_LIBRARIES(queryRepTest LINK_PUBLIC gtest_main gtest) 
+TARGET_LINK_LIBRARIES(metaCommandTest LINK_PUBLIC gtest_main gtest) 
+
+add_custom_target(runtests
+  COMMAND tableTest
+  COMMAND queryRepTest
+  COMMAND metaCommandTest
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
