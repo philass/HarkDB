@@ -1,0 +1,4 @@
+.help
+.import tests/resources/DataTest.csv t1
+from t1 select col1, col3
+.exit

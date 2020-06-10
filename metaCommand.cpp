@@ -31,6 +31,8 @@ void metaCommandParser(std::string line, std::unordered_map<std::string, Table> 
 		helpCommand();
 	} else if (command == ".import") {
 		importTable(words, tables);
+  } else if (command == ".exit") {
+    // do nothing
 	} else {
 		std::cout << command << " is not a currently supported command" << std::endl;
 	}
