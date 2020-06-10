@@ -20,12 +20,6 @@ void create_context(struct context* cont);
 
 void free_context(struct context* cont);
 
-//std::vector<uint32> launchAndExecute(std::vector<std::vector<uint32_t>> db, std::vector<uint64_t> select_cols, struct context* cont);
-
 std::vector<uint32_t> launchAndExecute(uint32_t* db, int* select_cols, int rows, int cols, struct context* cont);
-
-std::vector<uint32_t> launchAndExecute(uint32_t* db, int* select_cols, int rows, int cols);
-
-
 
 #endif
