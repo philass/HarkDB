@@ -57,6 +57,6 @@ let groupby [n][m][s][t] (db : [n][m]u32)  (cols: [s]i32)  (t_cols: [t]i32) : []
   let helper = merge t_cols
   in segmented_reduce helper (replicate s 0)  flag sorted_rows
 
-let main db g_col s_cols t_cols = 
+entry groupby db g_col s_cols t_cols = 
   let cols = concat [g_col] s_cols
   in groupby db cols t_cols

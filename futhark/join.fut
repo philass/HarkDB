@@ -49,7 +49,7 @@ let select [k] (cols : [k]i32) (row : []u32) : [k]u32 =
 --let map_helper [n][k][l] (v1 : [n][k]u32) (v2 : [n][l]u32) = 
 --	map2 (concat) v1 v2
 
-let join [n][m][s][t][l][k] (db1: [n][m]u32) (db2: [s][t]u32) 
+entry join [n][m][s][t][l][k] (db1: [n][m]u32) (db2: [s][t]u32) 
 			    (col1: i32)  (col2: i32)
 			    (cols1: [l]i32) (cols2: [k]i32)  = 
 	let l1 = zip3 db1[:, col1] (replicate n 1) (iota n)
