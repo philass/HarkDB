@@ -40,7 +40,7 @@ std::pair<int, std::string> getTypeAndColName(std::string colName) {
   return std::pair<int, std::string>(0, colName);
 }
 
-int getColIndex(std:string val, std::vector<std::string> headers) {
+int getColIndex(std::string val, std::vector<std::string> headers) {
   int pos = -1;
   for (int i = 0; i < headers.size(); i++) {
     if (headers[i] == val) {
@@ -164,30 +164,32 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
       // what do i want to do...
       //
       // get the column that is groupby'd
-      std::string name_gcol = groupbys[0]
+      std::string name_gcol = groupbys[0];
       int pos = -1;
       for (int i = 0; i < headers.size(); i++) {
         if (headers[i] == name_gcol) pos = i;
       } 
       if (pos < 0) {
-          throw "Column : " + val + " : was not in : " + froms[0];
+          throw "Column : " + name_gcol + " : was not in : " + froms[0];
       }
       g_col = pos;
 
       for (std::string val : selects) {
         std::pair<int, std::string> typeAndColPair = getTypeAndColName(val);
-        int col_type = std::get<0>typeAndColPair;
-        std::string col_name = std::get<1>typeAndColPair;
+        int col_type = std::get<0>(typeAndColPair);
+        std::string col_name = std::get<1>(typeAndColPair);
         // Go with the prevailing assumption 
-        if col_type
-
-
-
-      
-
-
-      
-    
+        if (col_type == 0) {
+          if (col_name != name_gcol) {
+            // we have reached a column that is not aggregated and not the groupby column
+            throw "" + col_name + " needs to be aggregated";
+          }
+        } else {
+          int col_pos = getColIndex(col_name, headers);
+          groupbyColumns.push_back(col_pos);
+          groupbyColumnsType.push_back(col_type);
+        }
+      }
     // There is no groupby statement...
     // We simply perform select with no special aggregation
     } else if (groupbys.size() == 0) {
@@ -206,7 +208,7 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
         selCols.push_back(idx);
       }
     } else if (groupbys.size() > 1) {
-      throw "Grouping by multiple columns is not currently supported"
+      throw "Grouping by multiple columns is not currently supported";
     }
 
 
