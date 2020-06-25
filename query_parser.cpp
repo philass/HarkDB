@@ -53,7 +53,7 @@ int getColIndex(std::string val, std::vector<std::string> headers) {
  
 
 QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<std::string, Table> tables) {
-	
+    
 	// Steps split lines up from select -> get everything between
 	std::vector<std::string> selects;
 	std::vector<std::string> groupbys;
@@ -158,7 +158,6 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 		Table table = tables.at(froms[0]);
 		std::vector<std::string> headers = table.getHeaders();
 		fromTable = froms[0];
-		selectColumns = selCols;
     // Logic in the case of groupby clause
     if (groupbys.size() == 1) {
       // what do i want to do...
@@ -177,6 +176,7 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
       for (std::string val : selects) {
         std::pair<int, std::string> typeAndColPair = getTypeAndColName(val);
         int col_type = std::get<0>(typeAndColPair);
+
         std::string col_name = std::get<1>(typeAndColPair);
         // Go with the prevailing assumption 
         if (col_type == 0) {
@@ -193,29 +193,25 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
     // There is no groupby statement...
     // We simply perform select with no special aggregation
     } else if (groupbys.size() == 0) {
+      // There is no groupby column
       g_col = -1;
       for (std::string val : selects) {
-        int pos = headers.size();
+        int pos = -1;
         for (int i = 0; i < headers.size(); i++) {
           if (headers[i] == val) {
             pos = i;
           }
         }
-        if (pos > headers.size()) {
+        if (pos < 0) {
           throw std::runtime_error("(9) Column : " + val + " : was not in : " + froms[0]);
         } 
         int idx = pos;
         selCols.push_back(idx);
       }
+      selectColumns = selCols;
     } else if (groupbys.size() > 1) {
       throw std::runtime_error("(10) Grouping by multiple columns is not currently supported");
     }
-
-
-    
-
-
-
 	} else if (froms.size() == 0) {
 		throw "No table give in FROM clause";
 	} else {
