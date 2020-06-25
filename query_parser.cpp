@@ -33,7 +33,7 @@ std::pair<int, std::string> getTypeAndColName(std::string colName) {
     } else if (str_type == "MIN(") {
       return std::pair<int, std::string>(4, middle);
     } else {
-      throw "HarkDB doesn't support the aggregation provided : " + colName;
+      throw std::runtime_error("(1) HarkDB doesn't support the aggregation provided : " + colName);
     }
   }
   // Didn't hit an aggregation function
@@ -147,7 +147,7 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 			} else if (having == true) {
 				havings.push_back(word);
 			} else {
-				throw std::invalid_argument("Don't currently support : " + word);
+				throw std::invalid_argument("(2) Don't currently support : " + word);
 			}
 		}
 	}
@@ -170,7 +170,7 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
         if (headers[i] == name_gcol) pos = i;
       } 
       if (pos < 0) {
-          throw "Column : " + name_gcol + " : was not in : " + froms[0];
+          throw std::runtime_error("(7) Column : " + name_gcol + " : was not in : " + froms[0]);
       }
       g_col = pos;
 
@@ -182,7 +182,7 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
         if (col_type == 0) {
           if (col_name != name_gcol) {
             // we have reached a column that is not aggregated and not the groupby column
-            throw "" + col_name + " needs to be aggregated";
+            throw std::runtime_error("(8)" + col_name + " needs to be aggregated");
           }
         } else {
           int col_pos = getColIndex(col_name, headers);
@@ -202,13 +202,13 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
           }
         }
         if (pos > headers.size()) {
-          throw "Column : " + val + " : was not in : " + froms[0];
+          throw std::runtime_error("(9) Column : " + val + " : was not in : " + froms[0]);
         } 
         int idx = pos;
         selCols.push_back(idx);
       }
     } else if (groupbys.size() > 1) {
-      throw "Grouping by multiple columns is not currently supported";
+      throw std::runtime_error("(10) Grouping by multiple columns is not currently supported");
     }
 
 
