@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <algorithm>
+#include <utility>
 
 #include "table.h"
 #include "query_parser.h"
@@ -17,6 +18,40 @@
 /* 
  * Implementation of QueryRepresentation Constructor
  */
+
+std::pair<int, std::string> getTypeAndColName(std::string colName) {
+  std::string str_type = colName.substr(0, 4);
+  char ending = colName.at(colName.length());
+  std::string middle = colName.substr(4, colName.length() - 1);
+  if (ending == ')') {
+    if (str_type == "MUL(") {
+      return std::pair<int, std::string>(1, middle);
+    } else if (str_type == "SUM(") {
+      return std::pair<int, std::string>(2, middle);
+    } else if (str_type == "MAX(") {
+      return std::pair<int, std::string>(3, middle);
+    } else if (str_type == "MIN(") {
+      return std::pair<int, std::string>(4, middle);
+    } else {
+      throw "HarkDB doesn't support the aggregation provided : " + colName;
+    }
+  }
+  // Didn't hit an aggregation function
+  return std::pair<int, std::string>(0, colName);
+}
+
+int getColIndex(std:string val, std::vector<std::string> headers) {
+  int pos = -1;
+  for (int i = 0; i < headers.size(); i++) {
+    if (headers[i] == val) {
+      pos = i;
+    }
+  }
+  return pos;
+}
+        
+ 
+
 QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<std::string, Table> tables) {
 	
 	// Steps split lines up from select -> get everything between
@@ -122,21 +157,63 @@ QueryRepresentation::QueryRepresentation(std::string query, std::unordered_map<s
 	if (froms.size() == 1) {
 		Table table = tables.at(froms[0]);
 		std::vector<std::string> headers = table.getHeaders();
-		for (std::string val : selects) {
-			int pos = headers.size();
-			for (int i = 0; i < headers.size(); i++) {
-				if (headers[i] == val) {
-					pos = i;
-				}
-			}
-			if (pos > headers.size()) {
-				throw "Column : " + val + " : was not in : " + froms[0];
-			} 
-			int idx = pos;
-			selCols.push_back(idx);
-		}
 		fromTable = froms[0];
 		selectColumns = selCols;
+    // Logic in the case of groupby clause
+    if (groupbys.size() == 1) {
+      // what do i want to do...
+      //
+      // get the column that is groupby'd
+      std::string name_gcol = groupbys[0]
+      int pos = -1;
+      for (int i = 0; i < headers.size(); i++) {
+        if (headers[i] == name_gcol) pos = i;
+      } 
+      if (pos < 0) {
+          throw "Column : " + val + " : was not in : " + froms[0];
+      }
+      g_col = pos;
+
+      for (std::string val : selects) {
+        std::pair<int, std::string> typeAndColPair = getTypeAndColName(val);
+        int col_type = std::get<0>typeAndColPair;
+        std::string col_name = std::get<1>typeAndColPair;
+        // Go with the prevailing assumption 
+        if col_type
+
+
+
+      
+
+
+      
+    
+    // There is no groupby statement...
+    // We simply perform select with no special aggregation
+    } else if (groupbys.size() == 0) {
+      g_col = -1;
+      for (std::string val : selects) {
+        int pos = headers.size();
+        for (int i = 0; i < headers.size(); i++) {
+          if (headers[i] == val) {
+            pos = i;
+          }
+        }
+        if (pos > headers.size()) {
+          throw "Column : " + val + " : was not in : " + froms[0];
+        } 
+        int idx = pos;
+        selCols.push_back(idx);
+      }
+    } else if (groupbys.size() > 1) {
+      throw "Grouping by multiple columns is not currently supported"
+    }
+
+
+    
+
+
+
 	} else if (froms.size() == 0) {
 		throw "No table give in FROM clause";
 	} else {
