@@ -46,8 +46,7 @@ add_executable(tableTest table.h table.cpp tests/tableTest.cpp)
 add_executable(queryRepTest table.h table.cpp query_parser.h 
                         query_parser.cpp tests/queryRepTest.cpp)
 add_executable(metaCommandTest table.h table.cpp  metaCommand.cpp
-                            query_parser.h query_parser.cpp
-                            metaCommand.h tests/queryRepTest.cpp)
+                            metaCommand.h tests/metaCommandTest.cpp)
 
 target_link_libraries(out PRIVATE
     select
@@ -59,8 +58,8 @@ TARGET_LINK_LIBRARIES(metaCommandTest LINK_PUBLIC gtest_main gtest)
 
 add_custom_target(runtests
   COMMAND tableTest
-  COMMAND queryRepTest
   COMMAND metaCommandTest
+  COMMAND queryRepTest
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

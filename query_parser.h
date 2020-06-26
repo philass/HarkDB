@@ -20,7 +20,11 @@ class QueryRepresentation
 
 		std::vector<uint64_t> groupbyColumnsType;
 
+    int g_col;
+
 		std::string fromTable;
+
+    std::string queryType;
 
 		// Need a Having Clause representation
 		
@@ -33,13 +37,25 @@ class QueryRepresentation
 			return selectColumns;
 		}
 		
-		std::vector<uint64_t> getGroupbyColumns();
+		std::vector<uint64_t> getGroupbyColumns() {
+      return groupbyColumns;
+    }
 
-		std::vector<uint64_t> getGroupbyColumnsType();
+		std::vector<uint64_t> getGroupbyColumnsType() {
+      return groupbyColumnsType;
+    }
+
+    int getGcol() {
+      return g_col;
+    }
 
 		std::string getFromTable() {
 			return fromTable;
 		}
+
+    std::string getQueryType() {
+      return queryType;
+    }
 };
 	
 	

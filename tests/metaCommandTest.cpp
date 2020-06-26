@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include "../table.h"
 #include "../metaCommand.h"
@@ -27,4 +28,5 @@ TEST(MetaCommandTest, ImportTest) {
           {1,  2,  3,  4,  5,  3,  2,  1}}; 
 	EXPECT_TRUE(headers == table.getHeaders());
 	EXPECT_TRUE(data == table.getData());
+
 }
