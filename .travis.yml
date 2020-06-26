@@ -21,7 +21,7 @@ script:
  - cd build
  - cmake ..
  - make runtests
-   # - make out
-   #- cd ..
-   #- ./build/out < stdin.txt
+ - make out
+ - cd ..
+ - ./build/out < stdin.txt
 

@@ -34,7 +34,7 @@ std::vector<uint32_t> launchAndExecute(uint32_t* db, int* select_cols, int rows,
   futhark_entry_select(ctx, &result, db_arr, y_arr);
   futhark_context_sync(ctx);
  
-  int64_t* shape;
+  const int64_t* shape;
   shape = futhark_shape_u32_2d(ctx, result);
   int64_t num_rows = shape[0];
   int64_t num_cols = shape[1];

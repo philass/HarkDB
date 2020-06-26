@@ -20,4 +20,4 @@ let sel_all (db : [][]u32) (cols : []i32) : [][]u32 =
   in result
 
 
-let select (db : [][]u32) (cols : []i32) : [][]u32 = sel_all db cols
+entry select (db : [][]u32) (cols : []i32) : [][]u32 = sel_all db cols
