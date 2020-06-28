@@ -16,9 +16,9 @@ class QueryRepresentation
 	private:
 		std::vector<int> selectColumns;
 		
-		std::vector<uint64_t> groupbyColumns;
+		std::vector<int> groupbyColumns;
 
-		std::vector<uint64_t> groupbyColumnsType;
+		std::vector<int> groupbyColumnsType;
 
     int g_col;
 
@@ -37,11 +37,11 @@ class QueryRepresentation
 			return selectColumns;
 		}
 		
-		std::vector<uint64_t> getGroupbyColumns() {
+		std::vector<int> getGroupbyColumns() {
       return groupbyColumns;
     }
 
-		std::vector<uint64_t> getGroupbyColumnsType() {
+		std::vector<int> getGroupbyColumnsType() {
       return groupbyColumnsType;
     }
 
