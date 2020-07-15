@@ -46,27 +46,3 @@ class FutharkContext:
         table = Table(table_name, table) 
         # possibly need to do an exception check here or line above
         self.tables[table_name] = table
-        """
-        if type(table) == type(pd.DataFrame()):
-            
-
-        elif type(table) == type(np.array([[]])):
-
-        elif type(table) == type(""):
-
-        else:
-            except("Table is not in a file, numpy array or dataframe")
-
-        """
-    
-
-
-        
-            
-
-        #if pandas dataframe do something
-
-        #if string assume it is a file and do something
-
-        #if numpy do something
-

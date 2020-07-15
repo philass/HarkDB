@@ -5,8 +5,17 @@ Class for representing a data table
 import numpy as np
 import pandas as pd
 
+def load_df(df):
+    # Possibly need to add a check to make sure the numpy values are of the same type
+    return df.to_numpy(), list(df) 
 
-def load_table(file_name, col_names=None):
+def load_np(nparray, col_names=None):
+    if col_names == None:
+        return nparray, ["col" + str(i + 1) for i in range(nparray.shape[0])]
+    else 
+        return nparray, col_names
+
+def load_file(file_name, col_names=None):
     """
     Tries to read data from csv or txt files.
     If the data is formatted properly returns
@@ -30,6 +39,15 @@ def load_table(file_name, col_names=None):
         return (table, headers)
     raise Exception("We do not support loading this file type")
 
+def load_table(table_name, table_obj):
+    if type(table) == type(pd.DataFrame()):
+        return load_df(table)
+    elif type(table) == type(np.array([[]])):
+        return load_np(table)
+    elif type(table) == type(""):
+        return load_file(table)
+    else:
+        except("Table is not in a file, numpy array or dataframe")
 
 class Table:
     """
