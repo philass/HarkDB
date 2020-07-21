@@ -39,10 +39,20 @@ class FutharkContext:
         self.FutEnv = Futhark(_test)
         self.tables = {}
 
-    def creat_table(self, table_name, table):
+    def create_table(self, table_name, table):
         """
         Stores a table if the table
         """
         table = Table(table_name, table) 
         # possibly need to do an exception check here or line above
         self.tables[table_name] = table
+
+    def drop_table(self, table_name):
+        del self.tables[table_name]
+
+    def sql(self, sql_statement):
+        """ 
+        Should call something here that takes two arguements 
+
+        sql_parse(tables, sql_statement)
+        """
