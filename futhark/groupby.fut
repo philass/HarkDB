@@ -60,5 +60,3 @@ let groupby [n][m][s][t] (db : [n][m]u32)  (cols: [s]i32)  (t_cols: [t]i32) : []
 let groupby_call db g_col s_cols t_cols = 
   let cols = concat [g_col] s_cols
   in groupby db cols t_cols
-
-

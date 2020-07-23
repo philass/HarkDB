@@ -1,10 +1,9 @@
 -- Orchestrate the calling of the different SQL clauses from a 
 -- single entry point
 
-import "select.fut"
-import "groupby.fut"
+import "select"
+import "groupby"
 
-entry query db g_col s_cols t_cols =
-  if g_col < 0
-  then select s_cols
-  else groupby_call db g_col s_cols t_cols
+entry query_sel db s_col = select db s_col
+
+entry query_groupby db g_col s_cols t_cols = groupby_call db g_col s_cols t_cols

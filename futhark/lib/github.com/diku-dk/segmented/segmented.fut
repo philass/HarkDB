@@ -71,7 +71,7 @@ let expand 'a 'b (sz: a -> i32) (get: a -> i32 -> b) (arr:[]a) : []b =
   let szs = map sz arr
   let idxs = replicated_iota szs
   let iotas = segmented_iota (map2 (!=) idxs (rotate (i32.negate 1) idxs))
-  in map2 (\i j -> get (unsafe arr[i]) j) idxs iotas
+  in map2 (\i j -> get arr[i] j) idxs iotas
 
 -- | Expansion function equivalent to performing a segmented reduction
 -- to the result of a general expansion with a flags vector expressing
@@ -87,7 +87,7 @@ let expand_reduce 'a 'b (sz: a -> i32) (get: a -> i32 -> b)
   let idxs = replicated_iota szs
   let flags = map2 (!=) idxs (rotate (i32.negate 1) idxs)
   let iotas = segmented_iota flags
-  let vs = map2 (\i j -> get (unsafe arr[i]) j) idxs iotas
+  let vs = map2 (\i j -> get arr[i] j) idxs iotas
   in segmented_reduce op ne flags vs
 
 -- | Expansion followed by an ''outer segmented reduce'' that ensures
