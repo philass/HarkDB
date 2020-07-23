@@ -30,8 +30,9 @@ fc.sql('select * from game_1 where val > 4') | parse_query && test.sql_query() &
 
 from futhark_ffi import Futhark
 from parse import sql_parse
-import _test # Will be modified to something like sql_.fut
+import _main # Will be modified to something like sql_.fut
 import numpy as np
+from table import Table
 
 
 class FutharkContext:
@@ -60,5 +61,5 @@ class FutharkContext:
         val_dic = sql_parse(self.tables, sql_statement)
         t1 = val_dic["table"]
         sel_col = val_dic["select"]
-        res self.FutEnv.query_sel(t1, np.array(sel_col))
-        return self.from_futhark(res)
+        res = self.FutEnv.query_sel(t1, np.array(sel_col))
+        return res.from_futhark(res)

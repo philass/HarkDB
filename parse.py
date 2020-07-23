@@ -27,10 +27,10 @@ def sql_parse(tables, sql_statement):
     js_obj = parse(sql_statement)
     table = None
     table_name = js_obj['from']
-    if table_name in tables.get_name():
+    if table_name in tables:
         table = tables[table_name]
     else:
-        except(f"{table_name} is not in tables")
+        raise Exception(f"{table_name} is not in tables")
 
     """
     Now we resolve the select columns??
@@ -43,11 +43,11 @@ def sql_parse(tables, sql_statement):
 
     for pair in select_pairs:
         # how do that pairs come
-        if "value" in pair
+        if "value" in pair:
             col_name =  pair["value"]
             idx = getIndex(columns, col_name)
             if idx < 0:
-                except(f"{col_name} is not in the schema of table {table_name}")
+                raise Exception(f"{col_name} is not in the schema of table {table_name}")
             else:
                 fut_cols_selects += [idx]
     return {"table": table.get_data(), "select": fut_cols_selects}

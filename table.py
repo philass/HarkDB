@@ -12,7 +12,7 @@ def load_df(df):
 def load_np(nparray, col_names=None):
     if col_names == None:
         return nparray, ["col" + str(i + 1) for i in range(nparray.shape[0])]
-    else 
+    else:
         return nparray, col_names
 
 def load_file(file_name, col_names=None):
@@ -39,7 +39,7 @@ def load_file(file_name, col_names=None):
         return (table, headers)
     raise Exception("We do not support loading this file type")
 
-def load_table(table_name, table_obj):
+def load_table(table_name, table):
     if type(table) == type(pd.DataFrame()):
         return load_df(table)
     elif type(table) == type(np.array([[]])):
@@ -47,7 +47,7 @@ def load_table(table_name, table_obj):
     elif type(table) == type(""):
         return load_file(table)
     else:
-        except("Table is not in a file, numpy array or dataframe")
+        raise Exception("Table is not in a file, numpy array or dataframe")
 
 class Table:
     """
@@ -57,7 +57,7 @@ class Table:
 
     def __init__(self, table_name, file_name):
         self._table_name = table_name
-        table, headers = load_table(file_name)
+        table, headers = load_table(table_name, file_name)
         self._schema = headers
         self._data = table
 
