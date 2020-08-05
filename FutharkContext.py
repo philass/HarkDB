@@ -61,5 +61,7 @@ class FutharkContext:
         val_dic = sql_parse(self.tables, sql_statement)
         t1 = val_dic["table"]
         sel_col = val_dic["select"]
-        res = self.FutEnv.query_sel(t1, np.array(sel_col))
-        return res.from_futhark(res)
+        if "groupbys" in val_dic:
+            res = self.FutEnv.query_sel(t1, np.array(sel_col))
+        else:
+        return self.FutEnv.from_futhark(res)
