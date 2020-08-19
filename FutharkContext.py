@@ -67,4 +67,5 @@ class FutharkContext:
         else:
             t_cols = val_dic["groupbys"] 
             g_col = val_dic["g_col"]
-            return self.FutEnv.from_futhark(t1, g_col, np.array(res), np.array(g_col))
+            res = self.FutEnv.query_groupby(t1, g_col, np.array(sel_cols), np.array(t_cols))
+            return self.FutEnv.from_futhark(res)

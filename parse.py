@@ -63,7 +63,7 @@ def sql_parse(tables, sql_statement):
         typ_cols_selects = []
         g_col = None # This will probably be an array if i fix futhark implementation of groupby
 
-        g_col_name = js_obj["groupby"][0]["value"]
+        g_col_name = js_obj["groupby"]["value"]
         g_col = getIndex(columns, g_col_name)
         if g_col < 0:
             raise Exception(f"{g_col_name} is not in the schema of table {table_name}")
