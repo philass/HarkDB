@@ -39,7 +39,7 @@ def sql_parse(tables, sql_statement):
 
     columns = table.get_schema()
 
-    if "groupby" not in js_obs.keys():
+    if "groupby" not in js_obj.keys():
 
         fut_cols_selects = []
 
@@ -54,6 +54,7 @@ def sql_parse(tables, sql_statement):
                     raise Exception(f"{col_name} is not in the schema of table {table_name}")
                 else:
                     fut_cols_selects += [idx]
+        print("We are about to return")
         return {"table": table.get_data(), "select": fut_cols_selects}
 
     if "groupby" in js_obj.keys():
@@ -74,7 +75,7 @@ def sql_parse(tables, sql_statement):
                 typ_cols_selects += [0]
             elif type(dic["value"]) == type(""):
                 bad_col_name = dic["value"]
-                raise Exception(f"{bad_col_name} is not an aggregation function or the columns thats grouped on"}
+                raise Exception(f"{bad_col_name} is not an aggregation function or the columns thats grouped on")
             else:
                 # Assume we are dealing with dic["value"] -> {"agg" : "col_name"}
                 if "max" in dic["value"]:
@@ -107,7 +108,7 @@ def sql_parse(tables, sql_statement):
                     typ_cols_selects += [1]
                 else:
                     raise Exception("Don't currently support this aggregations function")
-        return {"select": fut_cols_selects, "groupbys": typ_cols_selects, "table": table.get_data()}, "g_col": g_col}
+        return {"select": fut_cols_selects, "groupbys": typ_cols_selects, "table": table.get_data(), "g_col": g_col}
     return {}
 
 
