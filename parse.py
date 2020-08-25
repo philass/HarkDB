@@ -78,36 +78,15 @@ def sql_parse(tables, sql_statement):
                 raise Exception(f"{bad_col_name} is not an aggregation function or the columns thats grouped on")
             else:
                 # Assume we are dealing with dic["value"] -> {"agg" : "col_name"}
-                if "max" in dic["value"]:
-                    agg_col_name = dic["value"]["max"]
-                    agg_col = getIndex(columns, agg_col_name)
-                    if agg_col < 0:
-                        raise Exception(f"{agg_col_name} is not in the schema of table {table_name}")
-                    fut_cols_selects += [agg_col]
-                    typ_cols_selects += [3]
-                elif "min" in dic["value"]:
-                    agg_col_name = dic["value"]["min"]
-                    agg_col = getIndex(columns, agg_col_name)
-                    if agg_col < 0:
-                        raise Exception(f"{agg_col_name} is not in the schema of table {table_name}")
-                    fut_cols_selects += [agg_col]
-                    typ_cols_selects += [4]
-                elif "sum" in dic["value"]:
-                    agg_col_name = dic["value"]["sum"]
-                    agg_col = getIndex(columns, agg_col_name)
-                    if agg_col < 0:
-                        raise Exception(f"{agg_col_name} is not in the schema of table {table_name}")
-                    fut_cols_selects += [agg_col]
-                    typ_cols_selects += [2]
-                elif "prod" in dic["value"]:
-                    agg_col_name = dic["value"]["prod"]
-                    agg_col = getIndex(columns, agg_col_name)
-                    if agg_col < 0:
-                        raise Exception(f"{agg_col_name} is not in the schema of table {table_name}")
-                    fut_cols_selects += [agg_col]
-                    typ_cols_selects += [1]
-                else:
-                    raise Exception("Don't currently support this aggregations function")
+                funcToFut = {"prod" : 1, "sum" : 2, "max" : 3, "min" : 4}
+                for agg_func, agg_val in funcToFut.items():
+                    if agg_func in dic["value"]:
+                        agg_col_name = dic["value"][agg_func]
+                        agg_col = getIndex(columns, agg_col_name)
+                        if agg_col < 0:
+                            raise Exception(f"{agg_col_name} is not in the schema of table {table_name}")
+                        fut_cols_selects += [agg_col]
+                        typ_cols_selects += [agg_val]
         return {"select": fut_cols_selects, "groupbys": typ_cols_selects, "table": table.get_data(), "g_col": g_col}
     return {}
 
