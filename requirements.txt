@@ -1,0 +1,2 @@
+numpy
+futhark-ffi
