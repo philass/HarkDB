@@ -1,2 +1,3 @@
 numpy
 futhark-ffi
+moz-sql-parser
