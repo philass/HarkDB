@@ -1,0 +1,4 @@
+numpy==1.19.2
+futhark-ffi
+moz-sql-parser
+pandas
